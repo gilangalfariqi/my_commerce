@@ -99,3 +99,31 @@ Route::prefix('api/fitment')->name('api.fitment.')->group(function () {
 Route::get('/sitemap.xml', [App\Http\Controllers\Frontend\SitemapController::class, 'index'])->name('sitemap');
 
 require __DIR__.'/auth.php';
+
+// Secure Vercel database migration route (secured via APP_KEY token)
+Route::get('/vercel-migrate', function () {
+    if (request()->query('token') !== env('APP_KEY')) {
+        abort(403, 'Unauthorized token.');
+    }
+    
+    try {
+        \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
+        $output = \Illuminate\Support\Facades\Artisan::output();
+        
+        if (request()->has('seed')) {
+            \Illuminate\Support\Facades\Artisan::call('db:seed', ['--force' => true]);
+            $output .= "\n" . \Illuminate\Support\Facades\Artisan::output();
+        }
+        
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Migrations/Seeders executed successfully.',
+            'output' => explode("\n", trim($output))
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'status' => 'error',
+            'message' => $e->getMessage()
+        ], 500);
+    }
+});
