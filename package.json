@@ -3,9 +3,10 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "dev": "vite",
     "build": "vite build",
-    "dev": "vite"
-  },
+    "vercel-build": "amazon-linux-extras install php8.3 -y || true && composer install --no-dev --prefer-dist --optimize-autoloader"
+},
   "devDependencies": {
     "@playwright/test": "^1.60.0",
     "@tailwindcss/forms": "^0.5.2",
