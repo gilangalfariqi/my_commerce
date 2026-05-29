@@ -6,16 +6,19 @@ use App\Http\Controllers\Frontend\ProductController;
 use App\Http\Controllers\Frontend\CartController;
 use App\Http\Controllers\Frontend\CheckoutController;
 use App\Http\Controllers\Frontend\OrderController;
-use App\Services\RajaOngkir\RajaOngkirService;
 use Illuminate\Http\Request;
+
 use Illuminate\Support\Facades\Route;
 
 // Frontend routes
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
-// Products
+// Products & Catalog
+Route::get('/catalog', [ProductController::class, 'index'])->name('catalog.index');
 Route::get('/products', [ProductController::class, 'index'])->name('products.index');
-Route::get('/products/autocomplete', [ProductController::class, 'searchAutocomplete'])->name('products.autocomplete');
+Route::get('/products/autocomplete', [ProductController::class, 'searchAutocomplete'])
+    ->name('products.autocomplete')
+    ->middleware('throttle:60,1');
 Route::get('/products/{slug}', [ProductController::class, 'show'])->name('products.show');
 
 // Cart AJAX endpoints
@@ -28,10 +31,18 @@ Route::delete('/cart/coupon', [CartController::class, 'removeCoupon'])->name('ca
 
 // Checkout
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
-    Route::get('/checkout/cities', [CheckoutController::class, 'getCities'])->name('checkout.cities');
-    Route::post('/checkout/shipping', [CheckoutController::class, 'calculateShipping'])->name('checkout.shipping');
-    Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
+    // Route checkout lama (payment + form alamat) dinonaktifkan.
+    // Digantikan dengan checkout WhatsApp cepat: /checkout/whatsapp-fast
+
+
+    // Checkout WhatsApp fast: tampilkan cart di halaman /checkout
+    Route::get('/checkout', [CheckoutController::class, 'whatsappFast'])->name('checkout.whatsappFast');
+
+    // Buat link WhatsApp redirect (untuk tombol di halaman)
+    Route::get('/checkout/link', [CheckoutController::class, 'whatsappFastLink'])->name('checkout.whatsappFastLink');
+
+
+
 
     // Customer dashboard & order history
     Route::get('/dashboard', function() {
@@ -53,10 +64,38 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-// AJAX API endpoints (publicly accessible, cached)
-Route::get('/api/cities', function (Request $request, RajaOngkirService $rajaOngkir) {
-    $cities = $rajaOngkir->getCities($request->integer('province_id') ?: null);
-    return response()->json(['cities' => $cities]);
-})->name('api.cities');
+// Bike Fitment API (used by Livewire and JS autocomplete)
+
+Route::prefix('api/fitment')->name('api.fitment.')->group(function () {
+    Route::get('/brands', function () {
+        return response()->json(
+            \App\Models\BikeBrand::active()->ordered()
+                ->get(['id', 'name', 'slug'])
+        );
+    })->name('brands');
+
+    Route::get('/models', function (\Illuminate\Http\Request $request) {
+        if (! $request->filled('brand')) {
+            return response()->json([]);
+        }
+        return response()->json(
+            \App\Models\BikeModel::active()
+                ->whereHas('bikeBrand', fn ($q) => $q->where('slug', $request->brand))
+                ->orderBy('name')
+                ->get(['id', 'name', 'slug', 'years_available'])
+        );
+    })->name('models');
+
+    Route::get('/years', function (\Illuminate\Http\Request $request) {
+        if (! $request->filled('model')) {
+            return response()->json([]);
+        }
+        $bikeModel = \App\Models\BikeModel::where('slug', $request->model)->first();
+        return response()->json($bikeModel?->getAllAvailableYears() ?? []);
+    })->name('years');
+});
+
+// Dynamic Sitemap
+Route::get('/sitemap.xml', [App\Http\Controllers\Frontend\SitemapController::class, 'index'])->name('sitemap');
 
 require __DIR__.'/auth.php';

@@ -183,7 +183,7 @@
 <script>
 function editProductForm() {
     return {
-        variants: @json($product->variants->map(fn($v) => ['id' => $v->id, 'name' => $v->name, 'price' => $v->price, 'stock' => $v->stock])),
+        variants: {!! json_encode($product->variants->map(fn($v) => ['id' => $v->id, 'name' => $v->name, 'price' => $v->price, 'stock' => $v->stock])) !!},
         addVariant() {
             this.variants.push({ id: null, name: '', price: '', stock: 0 });
         },

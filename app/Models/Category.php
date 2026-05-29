@@ -60,4 +60,15 @@ class Category extends Model
     {
         return $query->where('is_active', true);
     }
+
+    /**
+     * Industry-standard deterministic ordering for catalogs.
+     * Keeps the UI stable: primary by sort_order, then by name.
+     */
+    public function scopeOrdered(
+        \Illuminate\Database\Eloquent\Builder $query
+    ) {
+        return $query->orderBy('sort_order', 'asc')->orderBy('name', 'asc');
+    }
 }
+

@@ -16,14 +16,13 @@ return Application::configure(basePath: dirname(__DIR__))
                 ->name('admin.')
                 ->group(base_path('routes/admin.php'));
 
-            Route::middleware('web')
-                ->group(base_path('routes/webhook.php'));
+
         }
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->validateCsrfTokens(except: [
             'webhook/*',
-            'webhook/midtrans',
+
         ]);
 
         $middleware->web(append: [

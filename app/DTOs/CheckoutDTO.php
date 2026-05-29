@@ -20,7 +20,11 @@ readonly class CheckoutDTO
         public string $shippingService,
         public float $shippingCost,
         public ?string $notes,
-        public string $paymentMethod
+        /**
+         * For WhatsApp checkout workflow.
+         * Example: 'whatsapp_checkout'
+         */
+        public string $checkoutChannel
     ) {}
 
     public static function fromRequest(array $data, float $shippingCost): self
@@ -34,16 +38,17 @@ readonly class CheckoutDTO
             provinceName: $data['province_name'],
             cityId: (int) $data['city_id'],
             cityName: $data['city_name'],
-            district: $data['district'],
+            district: $data['district'] ?? ($data['city_name'] ?? ''),
             addressLine: $data['address_line'],
             postalCode: $data['postal_code'],
-            courier: $data['courier'],
-            shippingService: $data['shipping_service'],
+            courier: $data['courier'] ?? '',
+            shippingService: $data['shipping_service'] ?? '',
             shippingCost: $shippingCost,
             notes: $data['notes'] ?? null,
-            paymentMethod: $data['payment_method']
+            checkoutChannel: $data['checkout_channel'] ?? 'whatsapp_checkout',
         );
     }
+
 
     public function toShippingAddressArray(): array
     {

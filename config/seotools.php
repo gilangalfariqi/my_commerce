@@ -1,29 +1,74 @@
 <?php
 /**
- * @see https://github.com/artesaos/seotools
+ * Artesaos SEOTools Configuration — MotoPartHub
+ *
+ * Package: artesaos/seotools
+ * Docs: https://github.com/artesaos/seotools
+ *
+ * This config controls default meta tags, Open Graph, Twitter Cards,
+ * and JSON-LD for the entire application. Page-specific overrides are
+ * handled by App\Services\SEO\MetaService::setFor*() methods.
  */
 
 return [
+
+    /*
+    |--------------------------------------------------------------------------
+    | Inertia.js support
+    |--------------------------------------------------------------------------
+    | Set to true only if you are using Inertia.js. This project uses Blade.
+    */
     'inertia' => env('SEO_TOOLS_INERTIA', false),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Meta Tags
+    |--------------------------------------------------------------------------
+    */
     'meta' => [
-        /*
-         * The default configurations to be used by the meta generator.
-         */
-        'defaults'       => [
-            'title'        => "It's Over 9000!", // set false to total remove
-            'titleBefore'  => false, // Put defaults.title before page title, like 'It's Over 9000! - Dashboard'
-            'description'  => 'For those who helped create the Genki Dama', // set false to total remove
-            'separator'    => ' - ',
-            'keywords'     => [],
-            'canonical'    => false, // Set to null or 'full' to use Url::full(), set to 'current' to use Url::current(), set false to total remove
-            'robots'       => false, // Set to 'all', 'none' or any combination of index/noindex and follow/nofollow
+        'defaults' => [
+            // Default title when no page-specific title is set
+            'title'        => env('APP_NAME', 'MotoPartHub') . ' — Sparepart Motor Premium Indonesia',
+
+            // Prepend site name before page title: false = "Page Title — Site"
+            // true = "Site — Page Title"
+            'titleBefore'  => false,
+
+            // Default meta description (≤155 chars for Google snippet)
+            'description'  => 'Destinasi utama suku cadang OEM & aftermarket motor terpercaya di Indonesia. Honda, Yamaha, Kawasaki, Suzuki & lebih banyak merek. Harga kompetitif, stok lengkap.',
+
+            // Title separator: used between page title and site name
+            'separator'    => ' — ',
+
+            // Default keywords (page-specific keywords are added on top)
+            'keywords'     => [
+                'sparepart motor',
+                'suku cadang motor',
+                'sparepart OEM',
+                'aksesoris motor',
+                'suku cadang Honda',
+                'suku cadang Yamaha',
+                'MotoPartHub',
+                'online motor parts Indonesia',
+            ],
+
+            // Canonical URL — 'current' uses Url::current() (recommended)
+            'canonical'    => 'current',
+
+            // Robots directive: 'all' = index,follow (safe default for production)
+            'robots'       => 'all',
         ],
+
         /*
-         * Webmaster tags are always added.
-         */
+        |--------------------------------------------------------------------------
+        | Webmaster Verification Tags
+        |--------------------------------------------------------------------------
+        | Add your verification tokens from each platform's Search Console.
+        | Leave as null to omit that tag from the <head>.
+        */
         'webmaster_tags' => [
-            'google'    => null,
-            'bing'      => null,
+            'google'    => env('GOOGLE_SITE_VERIFICATION', null),
+            'bing'      => env('BING_SITE_VERIFICATION', null),
             'alexa'     => null,
             'pinterest' => null,
             'yandex'    => null,
@@ -32,38 +77,69 @@ return [
 
         'add_notranslate_class' => false,
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Open Graph Protocol
+    |--------------------------------------------------------------------------
+    | Controls og:* meta tags used by Facebook, LinkedIn, WhatsApp previews.
+    | @see https://ogp.me/
+    */
     'opengraph' => [
-        /*
-         * The default configurations to be used by the opengraph generator.
-         */
         'defaults' => [
-            'title'       => 'Over 9000 Thousand!', // set false to total remove
-            'description' => 'For those who helped create the Genki Dama', // set false to total remove
-            'url'         => false, // Set null for using Url::current(), set false to total remove
-            'type'        => false,
-            'site_name'   => false,
-            'images'      => [],
+            'title'       => env('APP_NAME', 'MotoPartHub') . ' — Sparepart Motor Premium',
+            'description' => 'Destinasi utama suku cadang OEM & aftermarket motor terpercaya di Indonesia. Harga kompetitif, pengiriman cepat ke seluruh Indonesia.',
+            'url'         => null,          // null = Url::current()
+            'type'        => 'website',
+            'site_name'   => env('APP_NAME', 'MotoPartHub'),
+            'images'      => [
+                // Default OG share image (1200×630px recommended)
+                // Uses APP_URL so it works in production
+                env('APP_URL', 'http://localhost') . '/images/og-default.webp',
+            ],
+
+            // Locale for OG tags
+            'locale'      => 'id_ID',
         ],
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Twitter / X Cards
+    |--------------------------------------------------------------------------
+    | Controls twitter:* meta tags used by X (formerly Twitter).
+    | @see https://developer.twitter.com/en/docs/twitter-for-websites/cards
+    */
     'twitter' => [
-        /*
-         * The default values to be used by the twitter cards generator.
-         */
         'defaults' => [
-            //'card'        => 'summary',
-            //'site'        => '@LuizVinicius73',
+            // Card type: 'summary' (small image) or 'summary_large_image' (large banner)
+            'card'    => 'summary_large_image',
+
+            // Your site's X/Twitter handle (without @). Leave commented to omit.
+            // 'site' => '@MotoPartHub',
+
+            // Creator handle (optional, for article authors)
+            // 'creator' => '@MotoPartHub',
         ],
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | JSON-LD Structured Data
+    |--------------------------------------------------------------------------
+    | Controls the default JSON-LD <script> tag in <head>.
+    | Page-specific JSON-LD (Product, BreadcrumbList) is pushed via
+    | @push('styles') in individual views from SchemaService.
+    */
     'json-ld' => [
-        /*
-         * The default configurations to be used by the json-ld generator.
-         */
         'defaults' => [
-            'title'       => 'Over 9000 Thousand!', // set false to total remove
-            'description' => 'For those who helped create the Genki Dama', // set false to total remove
-            'url'         => false, // Set to null or 'full' to use Url::full(), set to 'current' to use Url::current(), set false to total remove
-            'type'        => 'WebPage',
-            'images'      => [],
+            'title'       => env('APP_NAME', 'MotoPartHub') . ' — Sparepart Motor Premium Indonesia',
+            'description' => 'Destinasi utama suku cadang OEM & aftermarket motor terpercaya di Indonesia.',
+            'url'         => null,          // null = Url::current()
+            'type'        => 'WebSite',
+            'images'      => [
+                env('APP_URL', 'http://localhost') . '/images/og-default.webp',
+            ],
         ],
     ],
 ];
