@@ -1,18 +1,7 @@
 <?php
 
-use Illuminate\Foundation\Application;
-use Illuminate\Http\Request;
-
-define('LARAVEL_START', microtime(true));
-
-// 1. Register Composer Autoloader
-require __DIR__.'/../vendor/autoload.php';
-
-// 2. Bootstrap Laravel application
-/** @var Application $app */
-$app = require_once __DIR__.'/../bootstrap/app.php';
-
-// 3. Customize storage path for Vercel read-only filesystem environment
+// Vercel serverless environment has a read-only filesystem except for /tmp.
+// We redirect compiled views, sessions, and cache files to /tmp at runtime.
 $vercelStorage = '/tmp/storage/framework';
 foreach (['views', 'cache', 'sessions'] as $dir) {
     $path = $vercelStorage . '/' . $dir;
@@ -21,16 +10,10 @@ foreach (['views', 'cache', 'sessions'] as $dir) {
     }
 }
 
-// Dynamically override storage paths to writeable /tmp directory
-$app->useStoragePath('/tmp/storage');
+// Override Laravel default cache, view compiled, and log paths for serverless environment
+putenv('VIEW_COMPILED_PATH=' . $vercelStorage . '/views');
+putenv('SESSION_DRIVER=cookie'); // Serverless should use client-side cookies or DB sessions
+putenv('CACHE_STORE=array');     // Avoid writing file cache to read-only directory
+putenv('LOG_CHANNEL=stderr');    // Redirect logs to Vercel dashboard console
 
-// Force dynamic configurations at runtime to override cached configurations
-config([
-    'view.compiled' => $vercelStorage . '/views',
-    'session.driver' => 'cookie',
-    'cache.default' => 'array',
-    'logging.default' => 'stderr',
-]);
-
-// 4. Handle incoming HTTP request
-$app->handleRequest(Request::capture());
+require __DIR__ . '/../public/index.php';
