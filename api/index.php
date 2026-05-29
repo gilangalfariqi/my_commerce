@@ -1,9 +1,13 @@
 <?php
 
-// 1. WAJIB: Muat autoloader Composer agar semua class Laravel dikenali oleh Vercel
-require __DIR__ . '/../vendor/autoload.php';
+// Deteksi otomatis jalur autoload composer di lingkungan serverless Vercel
+if (file_exists(__DIR__ . '/../vendor/autoload.php')) {
+    require __DIR__ . '/../vendor/autoload.php';
+} elseif (file_exists(__DIR__ . '/vendor/autoload.php')) {
+    require __DIR__ . '/vendor/autoload.php';
+}
 
-// 2. Jalankan migrasi otomatis jika parameter rahasia dipanggil di URL
+// Jalankan migrasi otomatis jika parameter rahasia dipanggil di URL
 if (isset($_GET['jalankan_migrasi_rahasia'])) {
     $app = require __DIR__ . '/../bootstrap/app.php';
     $kernel = $app->make(Illuminate\Contracts\Console\Kernel::class);
@@ -12,5 +16,5 @@ if (isset($_GET['jalankan_migrasi_rahasia'])) {
     exit;
 }
 
-// 3. Meneruskan request normal ke index utama Laravel
+// Meneruskan request normal ke index utama Laravel
 require __DIR__ . '/../public/index.php';
