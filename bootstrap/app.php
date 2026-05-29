@@ -35,5 +35,23 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        //
+        $exceptions->report(function (\Throwable $e) {
+            if (env('VERCEL') || env('VERCEL_ENV')) {
+                error_log('RAW EXCEPTION ON VERCEL: ' . $e->getMessage() . "\n" . $e->getTraceAsString());
+                
+                if (!app()->runningInConsole() && !headers_sent()) {
+                    header('HTTP/1.1 500 Internal Server Error');
+                    header('Content-Type: application/json');
+                    echo json_encode([
+                        'error' => 'Application Error (Raw)',
+                        'class' => get_class($e),
+                        'message' => $e->getMessage(),
+                        'file' => $e->getFile(),
+                        'line' => $e->getLine(),
+                        'trace' => explode("\n", $e->getTraceAsString())
+                    ], JSON_PRETTY_PRINT);
+                    exit(1);
+                }
+            }
+        });
     })->create();
