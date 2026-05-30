@@ -61,31 +61,115 @@
 
 
     <style>
+        /* ── Dynamic Theme Colors from Admin Settings ── */
+        :root {
+            --c-primary:   {{ $siteSettings->get('color_primary',   '#ef4444') }};
+            --c-secondary: {{ $siteSettings->get('color_secondary', '#f97316') }};
+            --c-accent:    {{ $siteSettings->get('color_accent',    '#dc2626') }};
+            --c-primary-10: {{ $siteSettings->get('color_primary','#ef4444') }}1a;
+            --c-primary-20: {{ $siteSettings->get('color_primary','#ef4444') }}33;
+            --c-primary-30: {{ $siteSettings->get('color_primary','#ef4444') }}4d;
+            --c-bg:        {{ $siteSettings->get('color_background', '#0b0f19') }};
+        }
+
         [x-cloak] { display: none !important; }
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: #0b0f19; /* Sleek dark grey/black */
+            background-color: var(--c-bg);
         }
         h1, h2, h3, h4, h5, h6 {
             font-family: 'Outfit', sans-serif;
         }
         /* Custom scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0d1321; }
+        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 9999px; }
+        ::-webkit-scrollbar-thumb:hover { background: #334155; }
+
+        /* ── Reusable theme-colored utility classes ── */
+        .theme-border-hover:hover  { border-color: var(--c-primary) !important; }
+        .theme-text                { color: var(--c-primary) !important; }
+        .theme-text-hover:hover    { color: var(--c-primary) !important; }
+        .theme-bg                  { background-color: var(--c-primary) !important; }
+        .theme-bg-10               { background-color: var(--c-primary-10) !important; }
+        .theme-badge               { background-color: var(--c-primary) !important; color:#fff !important; }
+        .theme-btn {
+            background-color: var(--c-primary) !important;
+            color: #fff !important;
+            transition: opacity 0.2s;
         }
-        ::-webkit-scrollbar-track {
-            background: #0d1321;
+        .theme-btn:hover           { opacity: 0.88; }
+        .theme-shadow-hover:hover  { box-shadow: 0 20px 40px color-mix(in srgb, var(--c-primary) 25%, transparent) !important; }
+        .theme-card-hover:hover {
+            border-color: color-mix(in srgb, var(--c-primary) 40%, transparent) !important;
+            box-shadow: 0 20px 40px color-mix(in srgb, var(--c-primary) 12%, transparent) !important;
+            transform: translateY(-6px);
         }
-        ::-webkit-scrollbar-thumb {
-            background: #1e293b;
-            border-radius: 9999px;
+        .theme-icon-box {
+            background-color: var(--c-primary-10);
+            color: var(--c-primary);
+            border: 1px solid var(--c-primary-20);
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s, transform 0.3s;
         }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #334155;
+        .theme-icon-box:hover, .group:hover .theme-icon-box {
+            background-color: var(--c-primary) !important;
+            color: #fff !important;
+            border-color: transparent !important;
+            transform: scale(1.10);
         }
+        .theme-progress { background: linear-gradient(90deg, var(--c-primary), var(--c-secondary)) !important; }
+        .theme-title-hover:hover { color: var(--c-primary) !important; }
+        a.theme-title-hover:hover { color: var(--c-primary) !important; }
+        .group:hover .group-theme-text { color: var(--c-primary) !important; }
+        .theme-countdown { color: var(--c-primary) !important; }
+        .theme-pulse {
+            background-color: var(--c-primary) !important;
+            box-shadow: 0 4px 16px color-mix(in srgb, var(--c-primary) 40%, transparent);
+        }
+        .theme-flash-glow-1 { background: color-mix(in srgb, var(--c-primary) 5%, transparent) !important; }
+        .theme-flash-glow-2 { background: color-mix(in srgb, var(--c-secondary) 5%, transparent) !important; }
+
+        /* ── Dynamic opacity & borders via color-mix ── */
+        .theme-bg-5                { background-color: color-mix(in srgb, var(--c-primary) 5%, transparent) !important; }
+        .theme-bg-15                { background-color: color-mix(in srgb, var(--c-primary) 15%, transparent) !important; }
+        .theme-bg-20                { background-color: color-mix(in srgb, var(--c-primary) 20%, transparent) !important; }
+        .theme-bg-30                { background-color: color-mix(in srgb, var(--c-primary) 30%, transparent) !important; }
+        
+        .theme-border              { border-color: var(--c-primary) !important; }
+        .theme-border-10            { border-color: color-mix(in srgb, var(--c-primary) 10%, transparent) !important; }
+        .theme-border-15            { border-color: color-mix(in srgb, var(--c-primary) 15%, transparent) !important; }
+        .theme-border-20            { border-color: color-mix(in srgb, var(--c-primary) 20%, transparent) !important; }
+        .theme-border-30            { border-color: color-mix(in srgb, var(--c-primary) 30%, transparent) !important; }
+        .theme-border-50            { border-color: color-mix(in srgb, var(--c-primary) 50%, transparent) !important; }
+        .theme-border-hover-20:hover { border-color: color-mix(in srgb, var(--c-primary) 20%, transparent) !important; }
+        .theme-border-hover-30:hover { border-color: color-mix(in srgb, var(--c-primary) 30%, transparent) !important; }
+
+        .hover\:theme-bg:hover     { background-color: var(--c-primary) !important; }
+        .hover\:theme-bg-5:hover   { background-color: color-mix(in srgb, var(--c-primary) 5%, transparent) !important; }
+        .hover\:theme-bg-10:hover  { background-color: color-mix(in srgb, var(--c-primary) 10%, transparent) !important; }
+        .hover\:theme-bg-15:hover  { background-color: color-mix(in srgb, var(--c-primary) 15%, transparent) !important; }
+        .hover\:theme-bg-20:hover  { background-color: color-mix(in srgb, var(--c-primary) 20%, transparent) !important; }
+        .hover\:theme-text-light:hover { color: color-mix(in srgb, var(--c-primary) 80%, white) !important; }
+        
+        .theme-ring-focus:focus {
+            border-color: var(--c-primary) !important;
+            box-shadow: 0 0 0 3px color-mix(in srgb, var(--c-primary) 35%, transparent) !important;
+        }
+        .theme-ring-focus-40:focus {
+            border-color: var(--c-primary) !important;
+            box-shadow: 0 0 0 3px color-mix(in srgb, var(--c-primary) 40%, transparent) !important;
+        }
+        .theme-ring-focus-30:focus {
+            border-color: var(--c-primary) !important;
+            box-shadow: 0 0 0 3px color-mix(in srgb, var(--c-primary) 30%, transparent) !important;
+        }
+        
+        .prose-a-theme-text a { color: var(--c-primary) !important; }
+        .prose-a-theme-text a:hover { color: var(--c-accent) !important; }
     </style>
     @stack('styles')
 </head>
+
 <body class="antialiased text-slate-200 pb-28 md:pb-0" x-data="{ mobileSearchOpen: false }">
 
     <!-- Main Navigation Header (Glassmorphic Dark) -->
@@ -94,11 +178,17 @@
             
             <!-- Logo -->
             <a href="{{ route('home') }}" class="flex items-center gap-3 group">
-                <span class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-primary-600 to-red-500 flex items-center justify-center text-white shadow-premium group-hover:scale-105 group-hover:rotate-3 transition-all duration-300">
+                <span class="w-10 h-10 rounded-2xl flex items-center justify-center text-white shadow-premium group-hover:scale-105 group-hover:rotate-3 transition-all duration-300"
+                      style="background:linear-gradient(135deg,{{ $siteSettings->get('color_primary','#ef4444') }},{{ $siteSettings->get('color_accent','#dc2626') }});">
                     <i class="fa-solid fa-gears text-base"></i>
                 </span>
+                @php
+                    $logoFull = $siteSettings->get('nav_logo_text') ?: ($siteSettings->get('store_name') ?: 'MyCommerce');
+                    $highlight = $siteSettings->get('nav_logo_highlight') ?: '';
+                    $logoBase = $highlight ? str_replace($highlight, '', $logoFull) : $logoFull;
+                @endphp
                 <span class="font-extrabold text-xl sm:text-2xl tracking-tight text-white">
-                    MotoPart<span class="text-primary-600">Hub</span>
+                    {{ $logoBase }}<span style="color:{{ $siteSettings->get('color_primary','#ef4444') }};">{{ $highlight }}</span>
                 </span>
             </a>
 
@@ -107,7 +197,7 @@
                 <div class="relative w-full group">
                     <input 
                         type="text" 
-                        placeholder="Cari suku cadang, kode part, atau motor..." 
+                        placeholder="{{ $siteSettings->get('nav_search_placeholder','Cari produk...') }}" 
                         class="w-full bg-slate-900/60 border border-slate-800 rounded-full px-6 py-2.5 pl-12 text-sm text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-slate-900 focus:border-transparent transition-all duration-300 shadow-inner"
                         x-model="query"
                         @input.debounce.300ms="fetchSuggestions()"
@@ -170,11 +260,12 @@
                         </div>
                     </div>
                 @else
-                    <a href="{{ route('login') }}" class="hidden md:inline-flex text-sm font-semibold text-slate-300 hover:text-primary-500 transition-colors">
-                        Sign In
+                    <a href="{{ route('login') }}" class="hidden md:inline-flex text-sm font-semibold text-slate-300 transition-colors" style="hover:color:{{ $siteSettings->get('color_primary','#ef4444') }}">
+                        {{ $siteSettings->get('nav_login_text','Masuk') }}
                     </a>
-                    <a href="{{ route('register') }}" class="hidden md:inline-flex items-center justify-center bg-primary-600 hover:bg-primary-700 text-white px-6 py-2.5 rounded-full text-sm font-semibold shadow-premium hover:shadow-glow transition-all duration-300">
-                        Register
+                    <a href="{{ route('register') }}" class="hidden md:inline-flex items-center justify-center text-white px-6 py-2.5 rounded-full text-sm font-semibold shadow-premium transition-all duration-300"
+                       style="background-color:{{ $siteSettings->get('color_primary','#ef4444') }};">
+                        {{ $siteSettings->get('nav_register_text','Daftar') }}
                     </a>
                 @endauth
 
@@ -239,50 +330,100 @@
         <div class="absolute top-0 left-1/4 -translate-y-1/2 w-96 h-96 bg-primary-900/5 rounded-full blur-3xl pointer-events-none"></div>
 
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-12 relative z-10">
+            {{-- Brand / About --}}
             <div class="space-y-6">
                 <div class="flex items-center gap-3">
-                    <span class="w-10 h-10 rounded-2xl bg-primary-600 flex items-center justify-center text-white shadow-glow">
+                    <span class="w-10 h-10 rounded-2xl flex items-center justify-center text-white shadow-glow"
+                          style="background-color:{{ $siteSettings->get('color_primary','#ef4444') }};">
                         <i class="fa-solid fa-gears"></i>
                     </span>
-                    <span class="font-bold text-white text-2xl tracking-tight">MotoPart<span class="text-primary-500">Hub</span></span>
+                    @php
+                        $fLogoFull = $siteSettings->get('nav_logo_text') ?: ($siteSettings->get('store_name') ?: 'MyCommerce');
+                        $fHighlight = $siteSettings->get('nav_logo_highlight') ?: '';
+                        $fLogoBase = $fHighlight ? str_replace($fHighlight, '', $fLogoFull) : $fLogoFull;
+                    @endphp
+                    <span class="font-bold text-white text-2xl tracking-tight">
+                        {{ $fLogoBase }}<span style="color:{{ $siteSettings->get('color_primary','#ef4444') }};">{{ $fHighlight }}</span>
+                    </span>
                 </div>
-                <p class="text-sm leading-relaxed text-slate-400/80">Destinasi utama suku cadang asli dan aftermarket performa tinggi terbaik di Indonesia. Rawat motor Anda dengan produk berstandar internasional.</p>
+                <p class="text-sm leading-relaxed text-slate-400/80">{{ $siteSettings->get('footer_about','Toko online terpercaya dengan produk berkualitas.') }}</p>
+                {{-- Social Media --}}
                 <div class="flex gap-3">
-                    <a href="#" class="w-9 h-9 rounded-xl bg-slate-900 border border-slate-800 hover:border-primary-500 text-slate-400 hover:text-white flex items-center justify-center text-sm transition-all duration-300"><i class="fa-brands fa-facebook-f"></i></a>
-                    <a href="#" class="w-9 h-9 rounded-xl bg-slate-900 border border-slate-800 hover:border-primary-500 text-slate-400 hover:text-white flex items-center justify-center text-sm transition-all duration-300"><i class="fa-brands fa-instagram"></i></a>
-                    <a href="#" class="w-9 h-9 rounded-xl bg-slate-900 border border-slate-800 hover:border-primary-500 text-slate-400 hover:text-white flex items-center justify-center text-sm transition-all duration-300"><i class="fa-brands fa-twitter"></i></a>
+                    @if($siteSettings->get('social_facebook'))
+                    <a href="{{ $siteSettings->get('social_facebook') }}" target="_blank" rel="noopener" class="w-9 h-9 rounded-xl bg-slate-900 border border-slate-800 hover:border-blue-500 text-slate-400 hover:text-blue-400 flex items-center justify-center text-sm transition-all duration-300"><i class="fa-brands fa-facebook-f"></i></a>
+                    @endif
+                    @if($siteSettings->get('social_instagram'))
+                    <a href="{{ $siteSettings->get('social_instagram') }}" target="_blank" rel="noopener" class="w-9 h-9 rounded-xl bg-slate-900 border border-slate-800 hover:border-pink-500 text-slate-400 hover:text-pink-400 flex items-center justify-center text-sm transition-all duration-300"><i class="fa-brands fa-instagram"></i></a>
+                    @endif
+                    @if($siteSettings->get('social_tiktok'))
+                    <a href="{{ $siteSettings->get('social_tiktok') }}" target="_blank" rel="noopener" class="w-9 h-9 rounded-xl bg-slate-900 border border-slate-800 hover:border-white text-slate-400 hover:text-white flex items-center justify-center text-sm transition-all duration-300"><i class="fa-brands fa-tiktok"></i></a>
+                    @endif
+                    @if($siteSettings->get('social_youtube'))
+                    <a href="{{ $siteSettings->get('social_youtube') }}" target="_blank" rel="noopener" class="w-9 h-9 rounded-xl bg-slate-900 border border-slate-800 hover:border-red-500 text-slate-400 hover:text-red-400 flex items-center justify-center text-sm transition-all duration-300"><i class="fa-brands fa-youtube"></i></a>
+                    @endif
+                    @if($siteSettings->get('social_twitter'))
+                    <a href="{{ $siteSettings->get('social_twitter') }}" target="_blank" rel="noopener" class="w-9 h-9 rounded-xl bg-slate-900 border border-slate-800 hover:border-sky-500 text-slate-400 hover:text-sky-400 flex items-center justify-center text-sm transition-all duration-300"><i class="fa-brands fa-x-twitter"></i></a>
+                    @endif
                 </div>
             </div>
+
+            {{-- Navigasi --}}
             <div>
-                <h3 class="font-bold text-white text-sm uppercase tracking-wider mb-6">Navigasi</h3>
+                <h3 class="font-bold text-white text-sm uppercase tracking-wider mb-6">{{ $siteSettings->get('footer_nav_title','Navigasi') }}</h3>
                 <ul class="space-y-3.5 text-sm">
-                    <li><a href="{{ route('products.index') }}" class="hover:text-white hover:underline decoration-primary-500 decoration-2 transition-all">Semua Produk</a></li>
-                    <li><a href="{{ route('products.index', ['sort' => 'latest']) }}" class="hover:text-white hover:underline decoration-primary-500 decoration-2 transition-all">Terbaru</a></li>
-                    <li><a href="{{ route('home') }}#flash-sale" class="hover:text-white hover:underline decoration-primary-500 decoration-2 transition-all">Promo Flash Sale</a></li>
+                    <li><a href="{{ route('products.index') }}" class="hover:text-white transition-colors">Semua Produk</a></li>
+                    <li><a href="{{ route('products.index', ['sort' => 'latest']) }}" class="hover:text-white transition-colors">Terbaru</a></li>
+                    <li><a href="{{ route('home') }}#flash-sale" class="hover:text-white transition-colors">Promo Flash Sale</a></li>
+                    <li><a href="{{ route('orders.track') }}" class="hover:text-white transition-colors">Lacak Pesanan</a></li>
                 </ul>
             </div>
+
+            {{-- Kontak --}}
             <div>
-                <h3 class="font-bold text-white text-sm uppercase tracking-wider mb-6">Kontak & Bantuan</h3>
+                <h3 class="font-bold text-white text-sm uppercase tracking-wider mb-6">{{ $siteSettings->get('footer_contact_title','Kontak & Bantuan') }}</h3>
                 <ul class="space-y-3.5 text-sm">
+                    @if($siteSettings->get('store_email'))
                     <li>
-                        <a href="mailto:support@motoparthub.com" class="hover:text-white hover:underline decoration-primary-500 decoration-2 transition-all">
-                            Email: support@motoparthub.com
+                        <a href="mailto:{{ $siteSettings->get('store_email') }}" class="hover:text-white transition-colors">
+                            <i class="fa-solid fa-envelope mr-1.5 text-xs opacity-60"></i>{{ $siteSettings->get('store_email') }}
                         </a>
                     </li>
+                    @endif
+                    @if($siteSettings->get('store_phone'))
                     <li>
-                        <a href="tel:+6281234567890" class="hover:text-white hover:underline decoration-primary-500 decoration-2 transition-all">
-                            Telepon: +62 812-3456-7890
+                        <a href="tel:{{ $siteSettings->get('store_phone') }}" class="hover:text-white transition-colors">
+                            <i class="fa-solid fa-phone mr-1.5 text-xs opacity-60"></i>{{ $siteSettings->get('store_phone') }}
                         </a>
                     </li>
+                    @endif
+                    @if($siteSettings->get('store_whatsapp'))
                     <li>
-                        <a href="{{ route('orders.track') }}" class="hover:text-white hover:underline decoration-primary-500 decoration-2 transition-all">
-                            Bantuan: Lacak Pesanan
+                        <a href="https://wa.me/{{ $siteSettings->get('store_whatsapp') }}" target="_blank" rel="noopener" class="hover:text-green-400 transition-colors">
+                            <i class="fa-brands fa-whatsapp mr-1.5 text-xs opacity-60"></i>WhatsApp
                         </a>
                     </li>
-                    <li>
-                        <a href="#" class="hover:text-white hover:underline decoration-primary-500 decoration-2 transition-all">
-                            FAQ & Kebijakan Layanan
-                        </a>
+                    @endif
+                    @if($siteSettings->get('store_address'))
+                    <li class="text-slate-500 text-xs leading-relaxed">
+                        <i class="fa-solid fa-location-dot mr-1.5 opacity-60"></i>{{ $siteSettings->get('store_address') }}
+                    </li>
+                    @endif
+                </ul>
+            </div>
+
+            {{-- Jam Operasional --}}
+            <div>
+                <h3 class="font-bold text-white text-sm uppercase tracking-wider mb-6">Jam Operasional</h3>
+                <ul class="space-y-3.5 text-sm">
+                    <li class="flex items-start gap-2.5">
+                        <i class="fa-regular fa-clock mt-1 text-xs opacity-60"></i>
+                        <div>
+                            <p class="font-semibold text-slate-300">Setiap Hari</p>
+                            <p class="text-xs text-slate-500 mt-0.5">08:00 - 20:00 WIB</p>
+                        </div>
+                    </li>
+                    <li class="text-slate-500 text-xs leading-relaxed pl-6">
+                        Pengiriman instant/sameday batas maksimal jam 15:00 WIB. Pengiriman reguler dikirim di hari yang sama untuk order sebelum jam 17:00 WIB.
                     </li>
                 </ul>
             </div>
@@ -290,7 +431,7 @@
         </div>
         <hr class="my-12 border-slate-900 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-6 text-xs text-slate-500">
-            <p>&copy; {{ date('Y') }} MotoPart Hub. Built with excellence.</p>
+            <p>{{ $siteSettings->get('footer_copyright') ?: '© '.date('Y').' '.$siteSettings->get('store_name','MyCommerce').'. All rights reserved.' }}</p>
             <div class="flex gap-6">
                 <a href="#" class="hover:text-slate-300 transition-colors">Privacy Policy</a>
                 <a href="#" class="hover:text-slate-300 transition-colors">Terms of Service</a>
@@ -331,9 +472,9 @@
                                                         <div>
                                                             <div class="flex justify-between text-sm font-semibold text-white">
                                                                 <h3>
-                                                                    <a :href="item.product_slug" class="hover:text-primary-500 transition-colors" x-text="item.product_name"></a>
+                                                                    <a :href="item.product_url" class="theme-text-hover transition-colors" x-text="item.product_name"></a>
                                                                 </h3>
-                                                                <p class="ml-4 text-primary-500 font-bold" x-text="'Rp ' + item.formatted_subtotal"></p>
+                                                                <p class="ml-4 theme-text font-bold" x-text="'Rp ' + item.formatted_subtotal"></p>
                                                             </div>
                                                             <p class="mt-1.5 text-xs font-medium text-slate-500" x-text="item.variant_name ?? ''"></p>
                                                         </div>
@@ -375,12 +516,12 @@
                                 <hr class="my-4 border-slate-800">
                                 <div class="flex justify-between text-base font-extrabold text-white mb-6">
                                     <p>Total Akhir</p>
-                                    <p class="text-primary-500 text-lg" x-text="'Rp ' + $store.cart.formatted_grand_total"></p>
+                                    <p class="theme-text text-lg" x-text="'Rp ' + $store.cart.formatted_grand_total"></p>
                                 </div>
 
                                 <div class="space-y-3">
 
-<a href="{{ route('checkout.whatsappFast') }}" class="flex items-center justify-center rounded-full bg-primary-600 hover:bg-primary-700 text-white px-6 py-3.5 text-sm font-bold shadow-premium hover:shadow-glow transition-all duration-300">
+                                    <a href="{{ route('checkout.whatsappFast') }}" class="flex items-center justify-center rounded-full theme-btn text-white px-6 py-3.5 text-sm font-bold shadow-premium hover:shadow-glow transition-all duration-300">
                                         Checkout Sekarang <i class="fa-solid fa-arrow-right ml-2 text-xs"></i>
                                     </a>
 

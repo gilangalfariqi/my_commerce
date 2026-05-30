@@ -24,10 +24,17 @@ class MetaService
 {
     protected string $siteName;
     protected string $appUrl;
+    protected \Illuminate\Support\Collection $settings;
 
     public function __construct()
     {
-        $this->siteName = config('app.name', 'MotoPartHub');
+        try {
+            $this->settings = \App\Models\Setting::all()->pluck('value', 'key')->reject(fn($val) => $val === null || $val === '');
+            $this->siteName = $this->settings->get('store_name') ?? config('app.name', 'MotoPartHub');
+        } catch (\Throwable $e) {
+            $this->settings = collect();
+            $this->siteName = config('app.name', 'MotoPartHub');
+        }
         $this->appUrl   = config('app.url', 'http://localhost');
     }
 
@@ -36,9 +43,12 @@ class MetaService
      */
     public function setDefault(): void
     {
-        $title = "{$this->siteName} — Sparepart Motor Premium Indonesia";
-        $desc  = 'Destinasi utama suku cadang OEM & aftermarket motor terpercaya di Indonesia. '
-                . 'Honda, Yamaha, Kawasaki, Suzuki & lebih banyak merek. Harga kompetitif, stok lengkap.';
+        $storeName = $this->settings->get('store_name') ?? $this->siteName;
+        $storeTagline = $this->settings->get('store_tagline') ?? 'Sparepart Motor Premium Indonesia';
+        $title = "{$storeName} — {$storeTagline}";
+
+        $desc  = $this->settings->get('meta_description')
+                ?? 'Destinasi utama suku cadang OEM & aftermarket motor terpercaya di Indonesia. Honda, Yamaha, Kawasaki, Suzuki & lebih banyak merek. Harga kompetitif, stok lengkap.';
 
         $this->applyMeta($title, $desc, url()->current());
         $this->applyOpenGraph($title, $desc, url()->current(), 'website');
@@ -176,7 +186,7 @@ class MetaService
      */
     private function applyMeta(string $title, string $description, string $canonical, array $keywords = []): void
     {
-        SEOMeta::setTitle($title);
+        SEOMeta::setTitle($title, false);
         SEOMeta::setDescription($description);
         SEOMeta::setCanonical($canonical);
         SEOMeta::setRobots('index, follow');

@@ -27,6 +27,7 @@ class CartController extends Controller
                 'product_id' => $item->product_id,
                 'product_name' => $item->product->name,
                 'product_slug' => $item->product->slug,
+                'product_url' => route('products.show', $item->product->slug),
                 'variant_id' => $item->product_variant_id,
                 'variant_name' => $item->variant?->name,
                 'quantity' => $item->quantity,

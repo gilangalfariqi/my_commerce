@@ -51,9 +51,23 @@
                     <div class="divide-y divide-gray-100">
                         @foreach($order->items as $item)
                             <div class="flex py-4 items-center gap-4">
-                                <img src="{{ $item->product->primaryImage?->url ?? 'https://via.placeholder.com/150' }}" class="w-16 h-16 object-cover rounded-xl border border-gray-100">
+                                @if($item->product)
+                                    <a href="{{ route('products.show', $item->product->slug) }}" class="flex-shrink-0">
+                                        <img src="{{ $item->product->primaryImage?->url ?? 'https://via.placeholder.com/150' }}" class="w-16 h-16 object-cover rounded-xl border border-gray-100 hover:opacity-85 transition-opacity">
+                                    </a>
+                                @else
+                                    <img src="https://via.placeholder.com/150" class="w-16 h-16 object-cover rounded-xl border border-gray-100">
+                                @endif
                                 <div class="flex-1 min-w-0">
-                                    <h3 class="font-bold text-gray-900 text-sm truncate">{{ $item->product_name }}</h3>
+                                    <h3 class="font-bold text-gray-900 text-sm truncate">
+                                        @if($item->product)
+                                            <a href="{{ route('products.show', $item->product->slug) }}" class="hover:text-primary-500 transition-colors">
+                                                {{ $item->product_name }}
+                                            </a>
+                                        @else
+                                            {{ $item->product_name }}
+                                        @endif
+                                    </h3>
                                     <p class="text-xs text-gray-500 mt-1">{{ $item->variant_name ?? '' }} (x{{ $item->quantity }})</p>
                                 </div>
                                 <span class="text-sm font-bold text-gray-900">Rp {{ number_format($item->price * $item->quantity, 0, ',', '.') }}</span>

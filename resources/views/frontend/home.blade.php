@@ -80,8 +80,8 @@
             {{-- Content --}}
             <div class="absolute inset-0 flex items-center px-6 sm:px-12 lg:px-16">
                 <div class="max-w-2xl">
-                    <span class="inline-block text-[10px] sm:text-xs font-black tracking-[0.2em] text-red-500 uppercase mb-3 opacity-90">
-                        MotoPartHub — Sparepart Premium
+                    <span class="inline-block text-[10px] sm:text-xs font-black tracking-[0.2em] uppercase mb-3 opacity-90" style="color:{{ $settings->get('color_primary','#ef4444') }};">
+                        {{ $settings->get('hero_badge_text', 'Toko Terpercaya') }}
                     </span>
                     <h2 class="text-2xl sm:text-4xl lg:text-5xl font-black text-white leading-tight tracking-tight mb-3 sm:mb-4 line-clamp-2">
                         {{ $banner->title }}
@@ -92,8 +92,9 @@
                     </p>
                     @endif
                     <a href="{{ $banner->click_url ?: route('products.index') }}"
-                        class="inline-flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white font-bold text-sm px-6 py-3 sm:px-8 sm:py-3.5 rounded-full transition-all duration-300 shadow-lg shadow-red-900/40 hover:shadow-red-900/60 hover:-translate-y-0.5">
-                        Cari Suku Cadang
+                        class="inline-flex items-center gap-2 text-white font-bold text-sm px-6 py-3 sm:px-8 sm:py-3.5 rounded-full transition-all duration-300 shadow-lg hover:-translate-y-0.5"
+                        style="background-color:{{ $settings->get('color_primary','#ef4444') }};">
+                        {{ $settings->get('hero_cta_text', 'Belanja Sekarang') }}
                         <i class="fa-solid fa-arrow-right text-xs"></i>
                     </a>
                 </div>
@@ -231,12 +232,13 @@
             {{-- Header --}}
             <div class="flex flex-col sm:flex-row sm:items-center gap-4 mb-6">
                 <div class="flex items-center gap-4">
-                    <span class="w-12 h-12 rounded-2xl bg-red-600/10 border border-red-600/20 text-red-500 flex items-center justify-center text-xl flex-shrink-0">
+                    <span class="w-12 h-12 rounded-2xl border flex items-center justify-center text-xl flex-shrink-0"
+                          style="background-color:{{ $settings->get('color_primary','#ef4444') }}1a;border-color:{{ $settings->get('color_primary','#ef4444') }}33;color:{{ $settings->get('color_primary','#ef4444') }};">
                         <i class="fa-solid fa-motorcycle"></i>
                     </span>
                     <div>
-                        <h2 class="text-lg sm:text-xl font-bold text-white tracking-tight">Cari Berdasarkan Kendaraan</h2>
-                        <p class="text-xs sm:text-sm text-slate-400 mt-0.5">Filter suku cadang yang 100% kompatibel dengan motor Anda.</p>
+                        <h2 class="text-lg sm:text-xl font-bold text-white tracking-tight">{{ $settings->get('garage_section_title','Cari Berdasarkan Kendaraan') }}</h2>
+                        <p class="text-xs sm:text-sm text-slate-400 mt-0.5">{{ $settings->get('garage_section_subtitle','Filter produk yang 100% kompatibel dengan kendaraan Anda.') }}</p>
                     </div>
                 </div>
             </div>
@@ -307,10 +309,11 @@
                 <button
                     type="submit"
                     :disabled="!brand"
-                    class="w-full bg-red-600 hover:bg-red-700 disabled:bg-slate-800 disabled:text-slate-500 text-white font-bold text-sm py-3 px-6 rounded-xl shadow-md shadow-red-900/30 hover:shadow-red-900/50 transition-all duration-300 flex items-center justify-center gap-2"
+                    class="w-full disabled:bg-slate-800 disabled:text-slate-500 text-white font-bold text-sm py-3 px-6 rounded-xl shadow-md transition-all duration-300 flex items-center justify-center gap-2"
+                    style="background-color:{{ $settings->get('color_primary','#ef4444') }};"
                 >
                     <i class="fa-solid fa-magnifying-glass text-sm"></i>
-                    Cari Suku Cadang
+                    {{ $settings->get('garage_cta_text','Cari Produk') }}
                 </button>
             </form>
 
@@ -342,11 +345,12 @@
 <section class="mb-14">
     <div class="flex items-end justify-between mb-6 sm:mb-8">
         <div>
-            <h2 class="text-2xl sm:text-3xl font-black text-white tracking-tight leading-tight">Kategori Suku Cadang</h2>
-            <p class="text-sm text-slate-400 mt-1.5">Temukan suku cadang berkualitas berdasarkan kategori</p>
+            <h2 class="text-2xl sm:text-3xl font-black text-white tracking-tight leading-tight">{{ $settings->get('category_section_title','Kategori Produk') }}</h2>
+            <p class="text-sm text-slate-400 mt-1.5">{{ $settings->get('category_section_subtitle','Temukan produk berkualitas berdasarkan kategori') }}</p>
         </div>
-        <a href="{{ route('products.index') }}" class="hidden sm:flex text-xs font-bold text-slate-400 hover:text-red-400 transition-colors gap-1.5 items-center whitespace-nowrap">
-            Lihat Semua <i class="fa-solid fa-arrow-right text-[10px]"></i>
+        <a href="{{ route('products.index') }}" class="hidden sm:flex text-xs font-bold transition-colors gap-1.5 items-center whitespace-nowrap"
+           style="color:{{ $settings->get('color_primary','#ef4444') }}">
+            {{ $settings->get('category_view_all_text','Lihat Semua') }} <i class="fa-solid fa-arrow-right text-[10px]"></i>
         </a>
     </div>
 
@@ -414,17 +418,17 @@
             @php $icon = $categoryIconMap[$category->slug] ?? 'fa-gears'; @endphp
             <a
                 href="{{ route('products.index', ['category' => $category->slug]) }}"
-                class="group w-[96px] sm:w-[130px] flex-shrink-0 snap-start bg-slate-900 border border-slate-800 hover:border-red-500/30 rounded-2xl p-2.5 sm:p-5 text-center hover:bg-slate-800/70 hover:shadow-lg hover:shadow-red-950/20 transition-all duration-300 animate-category-float"
+                class="group w-[96px] sm:w-[130px] flex-shrink-0 snap-start bg-slate-900 border border-slate-800 theme-card-hover rounded-2xl p-2.5 sm:p-5 text-center hover:bg-slate-800/70 transition-all duration-300 animate-category-float"
                 style="animation-delay: {{ $loop->index * 0.25 }}s;"
             >
                 @if($category->url)
                     <img src="{{ $category->url }}" alt="{{ $category->name }}" class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl object-cover mx-auto mb-2.5 sm:mb-3">
                 @else
-                    <div class="w-10 h-10 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-slate-950 border border-slate-800 text-red-500 flex items-center justify-center mx-auto mb-2.5 sm:mb-3 group-hover:bg-red-600 group-hover:text-white group-hover:border-transparent group-hover:scale-110 transition-all duration-300">
+                    <div class="w-10 h-10 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl theme-icon-box flex items-center justify-center mx-auto mb-2.5 sm:mb-3">
                         <i class="fa-solid {{ $icon }} text-base sm:text-xl"></i>
                     </div>
                 @endif
-                <h3 class="text-[11px] sm:text-sm font-semibold text-slate-200 group-hover:text-red-400 transition-colors leading-snug line-clamp-2 min-h-[32px] sm:min-h-0 flex items-center justify-center">{{ $category->name }}</h3>
+                <h3 class="text-[11px] sm:text-sm font-semibold text-slate-200 group-theme-text transition-colors leading-snug line-clamp-2 min-h-[32px] sm:min-h-0 flex items-center justify-center">{{ $category->name }}</h3>
                 <span class="text-[9px] sm:text-[10px] text-slate-500 mt-1 block">{{ $category->products_count }} Produk</span>
             </a>
             @endforeach
@@ -448,7 +452,7 @@
         {{-- Header --}}
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-5 mb-8 pb-6 border-b border-slate-800 relative z-10">
             <div class="flex items-center gap-4">
-                <span class="w-12 h-12 rounded-2xl bg-red-600 text-white flex items-center justify-center text-xl font-black shadow-lg shadow-red-600/30 animate-pulse">
+                <span class="w-12 h-12 rounded-2xl theme-pulse text-white flex items-center justify-center text-xl font-black animate-pulse">
                     <i class="fa-solid fa-bolt"></i>
                 </span>
                 <div>
@@ -463,7 +467,7 @@
                 <div class="flex gap-1.5">
                     @foreach([['days','Hari'],['hours','Jam'],['minutes','Mnt'],['seconds','Dtk']] as [$prop, $label])
                     <div class="bg-slate-950 border border-slate-800 rounded-xl px-2.5 py-2 text-center min-w-[46px]">
-                        <span class="text-base font-black text-red-500 block" x-text="{{ $prop }}">00</span>
+                        <span class="text-base font-black theme-countdown block" x-text="{{ $prop }}">00</span>
                         <span class="text-[9px] font-bold text-slate-500 uppercase tracking-wider">{{ $label }}</span>
                     </div>
                     @endforeach
@@ -494,18 +498,18 @@
                         >
                     </a>
                     @if($discPct > 0)
-                    <span class="absolute top-2 left-2 bg-red-600 text-white text-[9px] sm:text-[10px] font-black px-2 py-0.5 rounded-lg shadow-md">
+                    <span class="absolute top-2 left-2 theme-badge text-[9px] sm:text-[10px] font-black px-2 py-0.5 rounded-lg shadow-md">
                         -{{ $discPct }}%
                     </span>
                     @endif
                 </div>
                 {{-- Info --}}
                 <div class="p-3 sm:p-4 flex-1 flex flex-col gap-2">
-                    <h3 class="text-xs sm:text-sm font-semibold text-slate-200 line-clamp-2 leading-snug group-hover:text-red-400 transition-colors">
+                    <h3 class="text-xs sm:text-sm font-semibold text-slate-200 line-clamp-2 leading-snug group-theme-text transition-colors">
                         <a href="{{ route('products.show', $item->product->slug) }}">{{ $item->product->name }}</a>
                     </h3>
                     <div class="flex flex-wrap items-baseline gap-1.5">
-                        <span class="text-sm sm:text-base font-black text-red-500">Rp {{ number_format($item->discounted_price, 0, ',', '.') }}</span>
+                        <span class="text-sm sm:text-base font-black theme-text">Rp {{ number_format($item->discounted_price, 0, ',', '.') }}</span>
                         <span class="text-xs text-slate-500 line-through">Rp {{ number_format($item->product->price, 0, ',', '.') }}</span>
                     </div>
                     {{-- Progress bar --}}
@@ -515,13 +519,13 @@
                             <span>{{ $soldPct }}%</span>
                         </div>
                         <div class="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden">
-                            <div class="h-full bg-gradient-to-r from-red-600 to-orange-500 rounded-full" style="width: {{ $soldPct }}%"></div>
+                            <div class="h-full theme-progress rounded-full" style="width: {{ $soldPct }}%"></div>
                         </div>
                     </div>
                     {{-- Buy button --}}
                     <button
                         @click="$store.cart.addToCart({{ $item->product_id }}, null, 1)"
-                        class="w-full mt-1 bg-slate-900 hover:bg-red-600 border border-slate-700 hover:border-transparent text-slate-300 hover:text-white font-bold text-[11px] sm:text-xs py-2.5 rounded-xl transition-all duration-300 flex items-center justify-center gap-1.5"
+                        class="w-full mt-1 theme-btn border border-transparent text-white font-bold text-[11px] sm:text-xs py-2.5 rounded-xl flex items-center justify-center gap-1.5"
                     >
                         <i class="fa-solid fa-basket-shopping"></i> Beli Sekarang
                     </button>
@@ -549,17 +553,17 @@ function renderProductCard($product) {
 <section class="mb-14">
     <div class="flex items-end justify-between mb-6 sm:mb-8">
         <div>
-            <h2 class="text-2xl sm:text-3xl font-black text-white tracking-tight leading-tight">Produk Unggulan</h2>
-            <p class="text-sm text-slate-400 mt-1.5">Suku cadang dan aksesoris performa tinggi pilihan terbaik</p>
+            <h2 class="text-2xl sm:text-3xl font-black text-white tracking-tight leading-tight">{{ $settings->get('featured_section_title', 'Produk Unggulan') }}</h2>
+            <p class="text-sm text-slate-400 mt-1.5">{{ $settings->get('featured_section_subtitle', 'Pilihan terbaik yang sudah dipercaya ribuan pelanggan') }}</p>
         </div>
-        <a href="{{ route('products.index', ['featured' => 1]) }}" class="flex text-xs font-bold text-slate-400 hover:text-red-400 transition-colors gap-1.5 items-center whitespace-nowrap">
+        <a href="{{ route('products.index', ['featured' => 1]) }}" class="flex text-xs font-bold text-slate-400 transition-colors gap-1.5 items-center whitespace-nowrap" style="color:{{ $settings->get('color_primary','#ef4444') }}" onmouseover="this.style.opacity='0.75'" onmouseout="this.style.opacity='1'">
             Lihat Semua <i class="fa-solid fa-arrow-right text-[10px]"></i>
         </a>
     </div>
 
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5">
         @foreach($featuredProducts as $product)
-        <article class="group bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden hover:border-red-500/30 hover:-translate-y-1.5 hover:shadow-xl hover:shadow-red-950/20 transition-all duration-300 flex flex-col">
+        <article class="group bg-slate-900 border border-slate-800 theme-card-hover rounded-2xl overflow-hidden transition-all duration-300 flex flex-col">
             <a href="{{ route('products.show', $product->slug) }}" class="block relative aspect-square overflow-hidden bg-slate-950">
                 <img
                     src="{{ $product->thumbnail_url }}"
@@ -568,7 +572,7 @@ function renderProductCard($product) {
                     loading="lazy"
                 >
                 @if($product->is_on_sale)
-                <span class="absolute top-2 left-2 bg-red-600 text-white text-[9px] sm:text-[10px] font-black px-2 py-0.5 rounded-lg shadow-md">
+                <span class="absolute top-2 left-2 theme-badge text-[9px] sm:text-[10px] font-black px-2 py-0.5 rounded-lg shadow-md">
                     -{{ $product->discount_percent }}%
                 </span>
                 @endif
@@ -580,7 +584,7 @@ function renderProductCard($product) {
             </a>
             <div class="p-3.5 sm:p-4 flex flex-col gap-2 flex-1">
                 <p class="text-[10px] font-bold text-slate-500 uppercase tracking-widest truncate">{{ $product->category?->name ?? 'Sparepart' }}</p>
-                <h3 class="text-xs sm:text-sm font-semibold text-slate-100 line-clamp-2 leading-snug group-hover:text-red-400 transition-colors">
+                <h3 class="text-xs sm:text-sm font-semibold text-slate-100 line-clamp-2 leading-snug group-theme-text transition-colors">
                     <a href="{{ route('products.show', $product->slug) }}">{{ $product->name }}</a>
                 </h3>
                 <div class="flex items-baseline gap-2 mt-auto pt-1">
@@ -597,7 +601,7 @@ function renderProductCard($product) {
                     </a>
                     @else
                     <button @click="$store.cart.addToCart({{ $product->id }}, null, 1)"
-                        class="flex-1 bg-red-600 hover:bg-red-700 text-white font-bold text-[11px] sm:text-xs py-2.5 rounded-xl transition-all duration-300 flex items-center justify-center gap-1">
+                        class="flex-1 theme-btn font-bold text-[11px] sm:text-xs py-2.5 rounded-xl flex items-center justify-center gap-1">
                         <i class="fa-solid fa-basket-shopping text-[10px]"></i> Beli
                     </button>
                     @endif
@@ -619,13 +623,13 @@ function renderProductCard($product) {
 @if($latestProducts->isNotEmpty())
 <section class="mb-14">
     <div class="mb-6 sm:mb-8">
-        <h2 class="text-2xl sm:text-3xl font-black text-white tracking-tight leading-tight">Produk Terbaru</h2>
-        <p class="text-sm text-slate-400 mt-1.5">Stok suku cadang baru langsung dari produsen resmi</p>
+        <h2 class="text-2xl sm:text-3xl font-black text-white tracking-tight leading-tight">{{ $settings->get('latest_section_title', 'Produk Terbaru') }}</h2>
+        <p class="text-sm text-slate-400 mt-1.5">{{ $settings->get('latest_section_subtitle', 'Produk baru yang baru saja kami tambahkan') }}</p>
     </div>
 
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5">
         @foreach($latestProducts as $product)
-        <article class="group bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden hover:border-red-500/30 hover:-translate-y-1.5 hover:shadow-xl hover:shadow-red-950/20 transition-all duration-300 flex flex-col">
+        <article class="group bg-slate-900 border border-slate-800 theme-card-hover rounded-2xl overflow-hidden transition-all duration-300 flex flex-col">
             <a href="{{ route('products.show', $product->slug) }}" class="block relative aspect-square overflow-hidden bg-slate-950">
                 <img
                     src="{{ $product->thumbnail_url }}"
@@ -634,7 +638,7 @@ function renderProductCard($product) {
                     loading="lazy"
                 >
                 @if($product->is_on_sale)
-                <span class="absolute top-2 left-2 bg-red-600 text-white text-[9px] sm:text-[10px] font-black px-2 py-0.5 rounded-lg shadow-md">
+                <span class="absolute top-2 left-2 theme-badge text-[9px] sm:text-[10px] font-black px-2 py-0.5 rounded-lg shadow-md">
                     -{{ $product->discount_percent }}%
                 </span>
                 @endif
@@ -643,8 +647,8 @@ function renderProductCard($product) {
                 </span>
             </a>
             <div class="p-3.5 sm:p-4 flex flex-col gap-2 flex-1">
-                <p class="text-[10px] font-bold text-slate-500 uppercase tracking-widest truncate">{{ $product->category?->name ?? 'Sparepart' }}</p>
-                <h3 class="text-xs sm:text-sm font-semibold text-slate-100 line-clamp-2 leading-snug group-hover:text-red-400 transition-colors">
+                <p class="text-[10px] font-bold text-slate-500 uppercase tracking-widest truncate">{{ $product->category?->name ?? 'Produk' }}</p>
+                <h3 class="text-xs sm:text-sm font-semibold text-slate-100 line-clamp-2 leading-snug group-theme-text transition-colors">
                     <a href="{{ route('products.show', $product->slug) }}">{{ $product->name }}</a>
                 </h3>
                 <div class="flex items-baseline gap-2 mt-auto pt-1">
@@ -661,7 +665,7 @@ function renderProductCard($product) {
                     </a>
                     @else
                     <button @click="$store.cart.addToCart({{ $product->id }}, null, 1)"
-                        class="flex-1 bg-red-600 hover:bg-red-700 text-white font-bold text-[11px] sm:text-xs py-2.5 rounded-xl transition-all duration-300 flex items-center justify-center gap-1">
+                        class="flex-1 theme-btn font-bold text-[11px] sm:text-xs py-2.5 rounded-xl flex items-center justify-center gap-1">
                         <i class="fa-solid fa-basket-shopping text-[10px]"></i> Beli
                     </button>
                     @endif
@@ -680,17 +684,21 @@ function renderProductCard($product) {
 {{-- ════════════════════════════════════════
      TRUST BADGES / USP BAR
 ════════════════════════════════════════ --}}
+@php
+$trustBadges = [
+    ['fa-shield-halved', $settings->get('badge_1_title','Produk Original'),  $settings->get('badge_1_desc','100% produk resmi & bersertifikat')],
+    ['fa-truck-fast',   $settings->get('badge_2_title','Pengiriman Cepat'), $settings->get('badge_2_desc','Estimasi 1–3 hari ke seluruh Indonesia')],
+    ['fa-headset',      $settings->get('badge_3_title','Konsultasi Gratis'),$settings->get('badge_3_desc','Tanya via WhatsApp, respon cepat')],
+    ['fa-rotate-left',  $settings->get('badge_4_title','Garansi Barang'),  $settings->get('badge_4_desc','Garansi kualitas dan keaslian produk')],
+];
+@endphp
 <section class="mb-8">
     <div class="bg-slate-900/60 border border-slate-800 rounded-2xl p-5 sm:p-6">
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 text-center">
-            @foreach([
-                ['fa-shield-halved', 'Produk Original', '100% suku cadang OEM & aftermarket bersertifikat'],
-                ['fa-truck-fast', 'Pengiriman Cepat', 'Estimasi 1–3 hari ke seluruh Indonesia'],
-                ['fa-headset', 'Konsultasi Gratis', 'Tanya via WhatsApp, respon cepat'],
-                ['fa-rotate-left', 'Garansi Barang', 'Garansi kecocokan dan kualitas produk'],
-            ] as [$icon, $title, $desc])
+            @foreach($trustBadges as [$icon, $title, $desc])
             <div class="flex flex-col items-center gap-2">
-                <span class="w-11 h-11 rounded-2xl bg-red-600/10 text-red-500 flex items-center justify-center text-lg">
+                <span class="w-11 h-11 rounded-2xl flex items-center justify-center text-lg"
+                      style="background-color:{{ $settings->get('color_primary','#ef4444') }}1a;color:{{ $settings->get('color_primary','#ef4444') }};">
                     <i class="fa-solid {{ $icon }}"></i>
                 </span>
                 <div>
@@ -704,7 +712,8 @@ function renderProductCard($product) {
 </section>
 
 {{-- Floating WhatsApp --}}
-<a href="https://wa.me/{{ config('app.whatsapp_number', '6282174128947') }}" target="_blank" rel="noopener noreferrer"
+@php $waNumber = $settings->get('store_whatsapp') ?: config('app.whatsapp_number', '6282174128947'); @endphp
+<a href="https://wa.me/{{ $waNumber }}" target="_blank" rel="noopener noreferrer"
     class="fixed bottom-24 md:bottom-8 right-5 z-30 w-14 h-14 bg-emerald-500 hover:bg-emerald-600 text-white rounded-full flex items-center justify-center shadow-xl shadow-emerald-900/40 hover:scale-110 hover:shadow-emerald-900/60 transition-all duration-300"
     title="Hubungi via WhatsApp">
     <i class="fa-brands fa-whatsapp text-[28px]"></i>

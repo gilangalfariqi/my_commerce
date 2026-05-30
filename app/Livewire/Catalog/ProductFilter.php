@@ -32,7 +32,6 @@ use Spatie\QueryBuilder\QueryBuilder;
  *   - wire:model.live.debounce.300ms on search to limit server round-trips
  *   - Pagination resets on any filter change via resetPage()
  */
-#[Title('Katalog Sparepart Motor — MotoPartHub')]
 class ProductFilter extends Component
 {
     use WithPagination;

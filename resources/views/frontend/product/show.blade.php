@@ -45,13 +45,13 @@
     <nav aria-label="Breadcrumb" class="-mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 py-3 bg-slate-950/60 border-b border-slate-900/60 mb-6 sm:mb-8">
         <ol class="flex items-center flex-wrap gap-x-2 gap-y-1 text-xs text-slate-500 max-w-7xl mx-auto">
             <li>
-                <a href="{{ url('/') }}" class="text-slate-400 hover:text-red-400 font-medium transition-colors">Home</a>
+                <a href="{{ url('/') }}" class="text-slate-400 hover:theme-text font-medium transition-colors">Home</a>
             </li>
             <li class="text-slate-700"><i class="fa-solid fa-chevron-right text-[9px]"></i></li>
             @if($product->categories->first())
             <li>
                 <a href="{{ route('products.index', ['category' => $product->categories->first()->slug]) }}"
-                    class="text-slate-400 hover:text-red-400 font-medium transition-colors">
+                    class="text-slate-400 hover:theme-text font-medium transition-colors">
                     {{ $product->categories->first()->name }}
                 </a>
             </li>
@@ -97,7 +97,7 @@
 
                 {{-- Badges --}}
                 @if($product->is_on_sale)
-                <div class="absolute top-4 left-4 bg-red-600 text-white text-xs font-black px-3 py-1 rounded-xl shadow-lg z-20">
+                <div class="absolute top-4 left-4 theme-badge text-xs font-black px-3 py-1 rounded-xl shadow-lg z-20">
                     -{{ $product->discount_percent }}% OFF
                 </div>
                 @endif
@@ -136,7 +136,7 @@
 
                 {{-- Mobile Badges --}}
                 @if($product->is_on_sale)
-                <div class="absolute top-3 left-3 bg-red-600 text-white text-[10px] font-black px-2 py-0.5 rounded-lg shadow-md z-20">
+                <div class="absolute top-3 left-3 theme-badge text-[10px] font-black px-2 py-0.5 rounded-lg shadow-md z-20">
                     -{{ $product->discount_percent }}% OFF
                 </div>
                 @endif
@@ -161,7 +161,8 @@
                 @foreach($allMedia as $index => $media)
                 <button
                     class="w-14 h-14 sm:w-16 sm:h-16 rounded-xl overflow-hidden border-2 transition-all duration-200 bg-slate-900 flex-shrink-0 snap-start"
-                    :class="activeIndex === {{ $index }} ? 'border-red-500 scale-105 shadow-md shadow-red-900/20' : 'border-slate-800 hover:border-slate-600'"
+                    :class="activeIndex === {{ $index }} ? 'scale-105 theme-border shadow-md' : 'border-slate-800 hover:border-slate-600'"
+                    :style="activeIndex === {{ $index }} ? 'box-shadow: 0 4px 12px color-mix(in srgb, var(--c-primary) 25%, transparent)' : ''"
                     @click="setImage('{{ $media->getUrl('hd') }}', {{ $index }})"
                     aria-label="Foto produk {{ $index + 1 }}"
                 >
@@ -182,7 +183,7 @@
             <div class="flex flex-wrap gap-1.5">
                 @foreach($product->categories as $cat)
                 <a href="{{ route('products.index', ['category' => $cat->slug]) }}"
-                    class="text-[10px] sm:text-[11px] font-bold text-red-400 bg-red-500/10 border border-red-500/20 hover:bg-red-500/15 rounded-full px-2.5 py-0.5 sm:px-3 sm:py-1 uppercase tracking-widest transition-colors">
+                    class="text-[10px] sm:text-[11px] font-bold theme-text theme-bg-10 border theme-border-20 hover:theme-bg-15 rounded-full px-2.5 py-0.5 sm:px-3 sm:py-1 uppercase tracking-widest transition-colors">
                     {{ $cat->name }}
                 </a>
                 @endforeach
@@ -196,7 +197,7 @@
             {{-- SKU / OEM --}}
             <div class="flex items-center gap-2 flex-wrap">
                 <span class="text-xs text-slate-500 font-medium">OEM / SKU:</span>
-                <code id="pdp-sku" class="font-mono text-xs sm:text-sm text-red-400 bg-red-500/5 border border-red-500/10 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg">{{ $product->sku }}</code>
+                <code id="pdp-sku" class="font-mono text-xs sm:text-sm theme-text theme-bg-5 border theme-border-10 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg">{{ $product->sku }}</code>
                 <button
                     @click="copyToClipboard('{{ $product->sku }}')"
                     class="flex items-center gap-1.5 text-xs text-slate-400 hover:text-white border border-slate-800 hover:border-slate-700 bg-slate-900/40 rounded-lg px-2.5 py-1 transition-all"
@@ -229,8 +230,8 @@
                     <span class="w-2 h-2 rounded-full bg-amber-500 blink-anim flex-shrink-0"></span>
                     <span class="text-xs sm:text-sm font-semibold text-amber-400">Stok Terbatas — Tinggal {{ $product->stock }} lagi!</span>
                 @else
-                    <span class="w-2 h-2 rounded-full bg-red-500 flex-shrink-0"></span>
-                    <span class="text-xs sm:text-sm font-semibold text-red-400">Stok Habis — Silakan Pre-Order</span>
+                    <span class="w-2 h-2 rounded-full theme-bg flex-shrink-0"></span>
+                    <span class="text-xs sm:text-sm font-semibold theme-text">Stok Habis — Silakan Pre-Order</span>
                 @endif
             </div>
 
@@ -265,7 +266,7 @@
                             @foreach($product->fitments->sortBy('bikeBrand.name') as $fitment)
                             <tr class="border-b border-slate-850/60 last:border-0 hover:bg-slate-850/30 transition-colors">
                                 <td class="px-4 py-2">
-                                    <span class="text-[10px] font-semibold text-red-400 bg-red-500/10 border border-red-500/15 rounded px-2 py-0.5">{{ $fitment->bikeBrand?->name ?? '—' }}</span>
+                                    <span class="text-[10px] font-semibold theme-text theme-bg-10 border theme-border-15 rounded px-2 py-0.5">{{ $fitment->bikeBrand?->name ?? '—' }}</span>
                                 </td>
                                 <td class="px-4 py-2 text-slate-300 text-xs font-medium">{{ $fitment->name }}</td>
                                 <td class="px-4 py-2">
@@ -291,7 +292,7 @@
                         x-transition:enter-end="opacity-100 translate-y-0"
                     >
                         <div class="min-w-0">
-                            <span class="inline-block font-bold text-red-400 bg-red-500/10 border border-red-500/15 rounded px-1.5 py-0.5 mr-1.5 text-[9px]">{{ $fitment->bikeBrand?->name ?? '—' }}</span>
+                            <span class="inline-block font-bold theme-text theme-bg-10 border theme-border-15 rounded px-1.5 py-0.5 mr-1.5 text-[9px]">{{ $fitment->bikeBrand?->name ?? '—' }}</span>
                             <span class="text-slate-200 font-semibold">{{ $fitment->name }}</span>
                         </div>
                         <div class="text-right flex-shrink-0">
@@ -307,7 +308,7 @@
                     <div class="p-2.5 text-center bg-slate-900/30">
                         <button 
                             @click="showAllFitments = !showAllFitments"
-                            class="text-xs font-bold text-red-400 hover:text-red-300 inline-flex items-center gap-1.5 focus:outline-none transition-all py-1 px-3 rounded-lg hover:bg-slate-800/40"
+                            class="text-xs font-bold theme-text hover:theme-text-light inline-flex items-center gap-1.5 focus:outline-none transition-all py-1 px-3 rounded-lg hover:bg-slate-800/40"
                         >
                             <span x-text="showAllFitments ? 'Sembunyikan' : 'Lihat Semua ({{ $product->fitments->count() }} Motor)'"></span>
                             <i class="fa-solid transition-transform duration-200" :class="showAllFitments ? 'rotate-180' : ''"><i class="fa-solid fa-chevron-down text-[10px]"></i></i>
@@ -335,7 +336,7 @@
                     </span>
                     <button 
                         @click="fitmentSelected = false; garageBrand=''; garageModel=''; garageYear=''" 
-                        class="text-xs text-red-400 hover:text-red-300 font-bold transition-all px-2.5 py-1 rounded-lg hover:bg-red-500/5 border border-red-500/10"
+                        class="text-xs theme-text hover:theme-text-light font-bold transition-all px-2.5 py-1 rounded-lg hover:theme-bg-5 border theme-border-10"
                     >
                         Ubah
                     </button>
@@ -347,7 +348,7 @@
                         <label class="text-[11px] font-bold text-slate-300 uppercase tracking-wider flex items-center gap-2 select-none cursor-pointer">
                             🔧 Sesuaikan dengan Motor Saya (Opsional)
                         </label>
-                        <span class="text-[10px] text-slate-400 hover:text-red-400 transition-colors flex items-center gap-1">
+                        <span class="text-[10px] text-slate-400 hover:theme-text transition-colors flex items-center gap-1">
                             <span x-text="showGarageSelector ? 'Tutup' : 'Pilih'"></span>
                             <i class="fa-solid text-[9px] transition-transform duration-250" :class="showGarageSelector ? 'rotate-180' : ''"><i class="fa-solid fa-chevron-down"></i></i>
                         </span>
@@ -357,7 +358,7 @@
                         {{-- Brand --}}
                         <div class="relative">
                             <select x-model="garageBrand" @change="garageModel=''; garageYear=''"
-                                class="w-full bg-slate-900 border border-slate-850 rounded-xl px-3 py-2 text-xs font-semibold text-slate-200 focus:outline-none focus:ring-1 focus:ring-red-500/40 focus:border-red-500 appearance-none cursor-pointer transition-all hover:bg-slate-800"
+                                class="w-full bg-slate-900 border border-slate-850 rounded-xl px-3 py-2 text-xs font-semibold text-slate-200 focus:outline-none focus:ring-1 theme-ring-focus-40 appearance-none cursor-pointer transition-all hover:bg-slate-800"
                                 aria-label="Merek motor">
                                 <option value="">Pilih Merek</option>
                                 @foreach($product->fitments->groupBy('bikeBrand.name') as $brandName => $models)
@@ -370,7 +371,7 @@
                         {{-- Model --}}
                         <div class="relative">
                             <select x-model="garageModel" :disabled="!garageBrand"
-                                class="w-full bg-slate-900 border border-slate-850 rounded-xl px-3 py-2 text-xs font-semibold text-slate-200 focus:outline-none focus:ring-1 focus:ring-red-500/40 focus:border-red-500 appearance-none cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed transition-all hover:bg-slate-800"
+                                class="w-full bg-slate-900 border border-slate-850 rounded-xl px-3 py-2 text-xs font-semibold text-slate-200 focus:outline-none focus:ring-1 theme-ring-focus-40 appearance-none cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed transition-all hover:bg-slate-800"
                                 aria-label="Model motor">
                                 <option value="">Pilih Model</option>
                                 @foreach($product->fitments as $fitment)
@@ -385,7 +386,7 @@
                         {{-- Year --}}
                         <div class="relative">
                             <select x-model="garageYear" :disabled="!garageModel"
-                                class="w-full bg-slate-900 border border-slate-850 rounded-xl px-3 py-2 text-xs font-semibold text-slate-200 focus:outline-none focus:ring-1 focus:ring-red-500/40 focus:border-red-500 appearance-none cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed transition-all hover:bg-slate-800"
+                                class="w-full bg-slate-900 border border-slate-850 rounded-xl px-3 py-2 text-xs font-semibold text-slate-200 focus:outline-none focus:ring-1 theme-ring-focus-40 appearance-none cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed transition-all hover:bg-slate-800"
                                 aria-label="Tahun motor">
                                 <option value="">Tahun</option>
                                 @foreach($product->fitments as $fitment)
@@ -437,12 +438,12 @@
     @if($product->description)
     <section class="bg-slate-900/40 border border-slate-850 rounded-3xl p-5 sm:p-8 mb-10 animate-fade-in-up" style="animation-delay: 200ms;">
         <h2 class="text-lg sm:text-xl font-bold text-white mb-4 pb-3 border-b border-slate-850 flex items-center gap-3">
-            <span class="w-7 h-7 rounded-lg bg-red-600/10 text-red-500 flex items-center justify-center text-xs flex-shrink-0">
+            <span class="w-7 h-7 rounded-lg theme-bg-10 theme-text flex items-center justify-center text-xs flex-shrink-0">
                 <i class="fa-solid fa-file-lines"></i>
             </span>
             Deskripsi Produk
         </h2>
-        <div class="prose prose-invert prose-xs sm:prose-sm max-w-3xl prose-p:text-slate-400 prose-headings:text-slate-200 prose-strong:text-slate-200 prose-a:text-red-400 prose-li:text-slate-400 leading-relaxed text-justify">
+        <div class="prose prose-invert prose-xs sm:prose-sm max-w-3xl prose-p:text-slate-400 prose-headings:text-slate-200 prose-strong:text-slate-200 prose-a-theme-text prose-li:text-slate-400 leading-relaxed text-justify">
             {!! $product->description !!}
         </div>
     </section>
@@ -452,14 +453,14 @@
     @if($relatedProducts->isNotEmpty())
     <section class="animate-fade-in-up" style="animation-delay: 250ms;">
         <h2 class="text-lg sm:text-xl font-bold text-white mb-5 flex items-center gap-3">
-            <span class="w-7 h-7 rounded-lg bg-red-600/10 text-red-500 flex items-center justify-center text-xs flex-shrink-0">
+            <span class="w-7 h-7 rounded-lg theme-bg-10 theme-text flex items-center justify-center text-xs flex-shrink-0">
                 <i class="fa-solid fa-layer-group"></i>
             </span>
             Produk Serupa
         </h2>
         <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-5">
             @foreach($relatedProducts as $related)
-            <article class="group bg-slate-900 border border-slate-850 rounded-2xl overflow-hidden hover:border-red-500/20 hover:-translate-y-1 hover:shadow-lg hover:shadow-red-950/10 transition-all duration-300 flex flex-col">
+            <article class="group bg-slate-900 border border-slate-850 rounded-2xl overflow-hidden theme-card-hover transition-all duration-300 flex flex-col">
                 <a href="{{ route('products.show', $related->slug) }}" class="block relative aspect-square overflow-hidden bg-slate-950">
                     <img
                         src="{{ $related->thumbnail_url }}"
@@ -468,11 +469,11 @@
                         loading="lazy"
                     >
                     @if($related->is_on_sale)
-                    <span class="absolute top-2 left-2 bg-red-600 text-white text-[9px] font-black px-1.5 py-0.5 rounded shadow-sm">-{{ $related->discount_percent }}%</span>
+                    <span class="absolute top-2 left-2 theme-badge text-[9px] font-black px-1.5 py-0.5 rounded shadow-sm">-{{ $related->discount_percent }}%</span>
                     @endif
                 </a>
                 <div class="p-3 flex flex-col gap-1.5 flex-1">
-                    <h3 class="text-xs font-semibold text-slate-200 line-clamp-2 leading-snug group-hover:text-red-400 transition-colors">
+                    <h3 class="text-xs font-semibold text-slate-200 line-clamp-2 leading-snug group-theme-text transition-colors">
                         <a href="{{ route('products.show', $related->slug) }}">{{ $related->name }}</a>
                     </h3>
                     <div class="flex items-baseline gap-1 mt-auto pt-1">
@@ -482,7 +483,7 @@
                         @endif
                     </div>
                     <a href="{{ route('products.show', $related->slug) }}"
-                        class="mt-1 text-center bg-slate-800 hover:bg-red-600 border border-slate-850 hover:border-transparent text-slate-300 hover:text-white font-bold text-[10px] py-1.5 rounded-xl transition-all duration-200">
+                        class="mt-1 text-center bg-slate-800 hover:theme-bg border border-slate-850 hover:border-transparent text-slate-300 hover:text-white font-bold text-[10px] py-1.5 rounded-xl transition-all duration-200">
                         Lihat Detail
                     </a>
                 </div>
@@ -512,7 +513,7 @@
             >
             <div class="min-w-0">
                 <h4 class="text-xs font-bold text-slate-200 truncate pr-2">{{ $product->name }}</h4>
-                <p class="text-xs font-black text-red-500 mt-0.5">Rp {{ number_format($product->getFinalPrice(), 0, ',', '.') }}</p>
+                <p class="text-xs font-black theme-text mt-0.5">Rp {{ number_format($product->getFinalPrice(), 0, ',', '.') }}</p>
             </div>
         </div>
         <a 
@@ -618,7 +619,7 @@ function pdpPage() {
         shareProduct() {
             const data = {
                 title: '{{ $product->name }}',
-                text: 'Cek sparepart ini di MotoPartHub: {{ $product->name }} (SKU: {{ $product->sku }})',
+                text: 'Cek sparepart ini di {{ $siteSettings->get('store_name', 'MyCommerce') }}: {{ $product->name }} (SKU: {{ $product->sku }})',
                 url: window.location.href,
             };
             if (navigator.share) {

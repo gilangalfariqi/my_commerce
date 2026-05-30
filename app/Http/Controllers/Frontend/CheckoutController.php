@@ -53,9 +53,8 @@ class CheckoutController extends Controller
             return response()->json(['success' => false, 'message' => 'Your cart is empty.'], 422);
         }
 
-        // Destination WhatsApp number fixed to avoid misconfiguration.
-        // Format must be digits only.
-        $destination = '6282174128947';
+        $settings = \App\Models\Setting::all()->pluck('value', 'key');
+        $destination = $settings->get('store_whatsapp') ?? '6282174128947';
 
         $destination = preg_replace('/\D+/', '', (string) $destination);
         if (empty($destination)) {
@@ -73,8 +72,10 @@ class CheckoutController extends Controller
 
     private function buildWhatsAppFastMessage($cart): string
     {
+        $settings = \App\Models\Setting::all()->pluck('value', 'key');
+        $storeName = $settings->get('store_name') ?? 'MotoPartHub';
         $lines = [];
-        $lines[] = 'Halo MotoPartHub, saya ingin melakukan pemesanan via WhatsApp Checkout (tanpa payment/alamat).';
+        $lines[] = "Halo {$storeName}, saya ingin melakukan pemesanan via WhatsApp Checkout (tanpa payment/alamat).";
         $lines[] = '';
         $lines[] = 'Rincian Pesanan:';
 
@@ -246,10 +247,11 @@ class CheckoutController extends Controller
 
     private function makeWhatsAppCheckoutUrl(Order $order): string
     {
-        // You MUST set the destination WhatsApp number in env.
-        // Example: WHATSAPP_CHECKOUT_NUMBER=6281234567890
-        $destination = config('services.whatsapp.checkout_number')
-            ?? env('WHATSAPP_CHECKOUT_NUMBER');
+        $settings = \App\Models\Setting::all()->pluck('value', 'key');
+        $destination = $settings->get('store_whatsapp')
+            ?? config('services.whatsapp.checkout_number')
+            ?? env('WHATSAPP_CHECKOUT_NUMBER')
+            ?? '6282174128947';
 
         $destination = preg_replace('/\D+/', '', (string) $destination);
 
@@ -266,8 +268,11 @@ class CheckoutController extends Controller
 
         $trackUrl = route('orders.show', $order->order_number);
 
+        $settings = \App\Models\Setting::all()->pluck('value', 'key');
+        $storeName = $settings->get('store_name') ?? 'MotoPartHub';
+
         $lines = [];
-        $lines[] = 'Halo MotoPartHub, saya ingin melakukan pemesanan melalui WhatsApp Checkout.';
+        $lines[] = "Halo {$storeName}, saya ingin melakukan pemesanan melalui WhatsApp Checkout.";
         $lines[] = '';
         $lines[] = 'Customer:';
         $lines[] = '- Nama: ' . ($shipping?->first_name . ' ' . $shipping?->last_name);

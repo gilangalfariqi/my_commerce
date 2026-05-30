@@ -18,7 +18,7 @@
 @endphp
 
 <article
-    class="group relative bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden flex flex-col hover:-translate-y-1.5 hover:border-red-500/30 hover:shadow-xl hover:shadow-red-950/20 transition-all duration-300"
+    class="group relative bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden flex flex-col theme-card-hover transition-all duration-300"
     x-data="{ hovered: false }"
     @mouseenter="hovered = true"
     @mouseleave="hovered = false"
@@ -51,7 +51,7 @@
 
         {{-- Discount badge --}}
         @if($product->discount_percent > 0)
-            <span class="absolute top-2 left-2 bg-red-600 text-white text-[10px] font-black px-2 py-0.5 rounded-lg shadow-md z-10 pointer-events-none">
+            <span class="absolute top-2 left-2 theme-badge text-[10px] font-black px-2 py-0.5 rounded-lg shadow-md z-10 pointer-events-none">
                 -{{ $product->discount_percent }}%
             </span>
         @endif
@@ -110,8 +110,8 @@
         </p>
 
         {{-- Product Name --}}
-        <h3 class="text-sm font-semibold text-slate-100 leading-snug line-clamp-2 group-hover:text-red-400 transition-colors">
-            <a href="{{ route('products.show', $product->slug) }}" class="hover:text-red-400">
+        <h3 class="text-sm font-semibold text-slate-100 leading-snug line-clamp-2 group-theme-text transition-colors">
+            <a href="{{ route('products.show', $product->slug) }}" class="group-theme-text">
                 {{ Str::limit($product->name, 60) }}
             </a>
         </h3>
@@ -150,7 +150,7 @@
                 {{-- Variant picker — go to product page --}}
                 <a
                     href="{{ route('products.show', $product->slug) }}"
-                    class="flex-1 inline-flex items-center justify-center gap-1.5 bg-red-600 hover:bg-red-700 text-white text-xs font-bold rounded-xl px-3 py-2 transition-colors"
+                    class="flex-1 inline-flex items-center justify-center gap-1.5 theme-btn text-xs font-bold rounded-xl px-3 py-2 transition-colors"
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-3.5 h-3.5" aria-hidden="true">
                         <path d="M2.5 3A1.5 1.5 0 0 0 1 4.5v4A1.5 1.5 0 0 0 2.5 10h4A1.5 1.5 0 0 0 8 8.5v-4A1.5 1.5 0 0 0 6.5 3h-4Zm9 0A1.5 1.5 0 0 0 10 4.5v4A1.5 1.5 0 0 0 11.5 10h4A1.5 1.5 0 0 0 17 8.5v-4A1.5 1.5 0 0 0 15.5 3h-4Zm-9 9A1.5 1.5 0 0 0 1 13.5v4A1.5 1.5 0 0 0 2.5 18h4A1.5 1.5 0 0 0 8 16.5v-4A1.5 1.5 0 0 0 6.5 12h-4Zm9 0A1.5 1.5 0 0 0 10 13.5v4A1.5 1.5 0 0 0 11.5 18h4A1.5 1.5 0 0 0 17 16.5v-4A1.5 1.5 0 0 0 15.5 12h-4Z"/>
@@ -163,7 +163,7 @@
                     @click="$store.cart.addToCart({{ $product->id }}, null, 1)"
                     @disabled($isOutOfStock)
                     aria-label="Beli Sekarang {{ $product->name }}"
-                    class="flex-1 inline-flex items-center justify-center gap-1.5 bg-red-600 hover:bg-red-700 disabled:bg-slate-700 disabled:cursor-not-allowed text-white text-xs font-bold rounded-xl px-3 py-2 transition-colors"
+                    class="flex-1 inline-flex items-center justify-center gap-1.5 theme-btn disabled:bg-slate-700 disabled:cursor-not-allowed text-white text-xs font-bold rounded-xl px-3 py-2 transition-colors"
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-3.5 h-3.5" aria-hidden="true">
                         <path d="M1 1.75A.75.75 0 0 1 1.75 1h1.628a1.75 1.75 0 0 1 1.734 1.51L5.18 3a65.25 65.25 0 0 1 13.36 1.412.75.75 0 0 1 .58.875 48.645 48.645 0 0 1-1.618 6.2.75.75 0 0 1-.712.513H6a2.5 2.5 0 0 0 0 5h8.25a.75.75 0 0 1 0 1.5H6a4 4 0 0 1-3.98-3.61L.85 3.605A.25.25 0 0 0 .604 3H1.75A.75.75 0 0 1 1 1.75ZM6 16.5a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm9.5 1.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z"/>

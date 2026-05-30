@@ -1,47 +1,126 @@
 <x-guest-layout>
-    <!-- Session Status -->
-    <x-auth-session-status class="mb-4" :status="session('status')" />
+    {{-- Session Status --}}
+    @if (session('status'))
+        <div class="session-alert">
+            <i class="fa-solid fa-circle-check"></i>
+            {{ session('status') }}
+        </div>
+    @endif
 
-    <form method="POST" action="{{ route('login') }}">
+    <form method="POST" action="{{ route('login') }}" id="loginForm" novalidate>
         @csrf
 
-        <!-- Email Address -->
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-        </div>
-
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
-
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="current-password" />
-
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
-
-        <!-- Remember Me -->
-        <div class="block mt-4">
-            <label for="remember_me" class="inline-flex items-center">
-                <input id="remember_me" type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" name="remember">
-                <span class="ms-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
+        {{-- Email Field --}}
+        <div style="margin-bottom: 1.1rem;">
+            <label class="field-label" for="email">
+                <i class="fa-solid fa-envelope" style="margin-right:0.3em;"></i> Alamat Email
             </label>
+            <div class="field-wrap" style="margin-bottom:0;">
+                <i class="fa-solid fa-at field-icon"></i>
+                <input
+                    id="email"
+                    class="field-input @error('email') border-red-500 @enderror"
+                    type="email"
+                    name="email"
+                    value="{{ old('email') }}"
+                    placeholder="nama@email.com"
+                    required
+                    autofocus
+                    autocomplete="username"
+                >
+            </div>
+            @error('email')
+                <div class="field-error">
+                    <i class="fa-solid fa-circle-exclamation"></i>
+                    {{ $message }}
+                </div>
+            @enderror
         </div>
 
-        <div class="flex items-center justify-end mt-4">
+        {{-- Password Field --}}
+        <div style="margin-bottom: 0.5rem;">
+            <label class="field-label" for="password">
+                <i class="fa-solid fa-lock" style="margin-right:0.3em;"></i> Password
+            </label>
+            <div class="field-wrap" style="margin-bottom:0;">
+                <i class="fa-solid fa-lock field-icon"></i>
+                <input
+                    id="password"
+                    class="field-input @error('password') border-red-500 @enderror"
+                    type="password"
+                    name="password"
+                    placeholder="••••••••"
+                    required
+                    autocomplete="current-password"
+                    style="padding-right: 2.8rem;"
+                >
+                <button type="button" class="pass-toggle" onclick="togglePassword('password', this)" tabindex="-1">
+                    <i class="fa-solid fa-eye"></i>
+                </button>
+            </div>
+            @error('password')
+                <div class="field-error">
+                    <i class="fa-solid fa-circle-exclamation"></i>
+                    {{ $message }}
+                </div>
+            @enderror
+        </div>
+
+        {{-- Remember & Forgot --}}
+        <div class="remember-row">
+            <label class="remember-label" for="remember_me">
+                <input type="checkbox" id="remember_me" name="remember">
+                <span>Ingat Saya</span>
+            </label>
             @if (Route::has('password.request'))
-                <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('password.request') }}">
-                    {{ __('Forgot your password?') }}
+                <a class="forgot-link" href="{{ route('password.request') }}">
+                    Lupa password?
                 </a>
             @endif
-
-            <x-primary-button class="ms-3">
-                {{ __('Log in') }}
-            </x-primary-button>
         </div>
+
+        {{-- Submit --}}
+        <button type="submit" class="btn-submit" id="submitBtn">
+            <span class="btn-submit-text">
+                <i class="fa-solid fa-right-to-bracket btn-submit-icon"></i>
+                Masuk ke Dashboard
+            </span>
+        </button>
     </form>
+
+    <script>
+        // Loading state on submit
+        const form = document.getElementById('loginForm');
+        const submitBtn = document.getElementById('submitBtn');
+
+        form.addEventListener('submit', function() {
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin btn-submit-icon"></i> Memverifikasi...';
+            submitBtn.style.opacity = '0.8';
+        });
+
+        // Input shake animation on error
+        document.querySelectorAll('.field-input').forEach(inp => {
+            if (inp.classList.contains('border-red-500') || inp.value === '') {
+                @if($errors->any())
+                inp.style.animation = 'shake 0.4s ease';
+                setTimeout(() => inp.style.animation = '', 400);
+                @endif
+            }
+        });
+    </script>
+
+    <style>
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%       { transform: translateX(-6px); }
+            40%       { transform: translateX(6px); }
+            60%       { transform: translateX(-4px); }
+            80%       { transform: translateX(4px); }
+        }
+        .border-red-500 {
+            border-color: rgba(248,113,113,0.6) !important;
+            box-shadow: 0 0 0 3px rgba(248,113,113,0.1) !important;
+        }
+    </style>
 </x-guest-layout>

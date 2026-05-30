@@ -7,6 +7,7 @@ use App\Models\Banner;
 use App\Models\Category;
 use App\Models\FlashSale;
 use App\Models\Product;
+use App\Models\Setting;
 use App\Services\SEO\MetaService;
 use Illuminate\Contracts\View\View;
 
@@ -57,12 +58,16 @@ class HomeController extends Controller
             ->take(8)
             ->get();
 
+        // Load all settings from DB and pass to view
+        $settings = Setting::all()->pluck('value', 'key')->reject(fn($val) => $val === null || $val === '');
+
         return view('frontend.home', compact(
             'banners',
             'categories',
             'flashSale',
             'featuredProducts',
-            'latestProducts'
+            'latestProducts',
+            'settings'
         ));
     }
 }

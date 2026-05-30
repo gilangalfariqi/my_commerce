@@ -65,14 +65,14 @@
                 {{-- ── Sidebar Header ── --}}
                 <div class="flex items-center justify-between p-5 border-b border-slate-800 sticky top-0 bg-slate-900 z-10">
                     <h2 class="text-sm font-bold text-slate-200 flex items-center gap-2">
-                        <i class="fa-solid fa-sliders text-red-500"></i>
+                        <i class="fa-solid fa-sliders theme-text"></i>
                         Filter Produk
                     </h2>
                     <div class="flex items-center gap-2">
                         @if($this->activeFilterCount > 0)
                             <button
                                 wire:click="resetFilters"
-                                class="text-xs text-red-400 bg-red-500/10 border border-red-500/20 hover:bg-red-500/20 rounded-full px-3 py-1 flex items-center gap-1 transition-colors"
+                                class="text-xs theme-text theme-bg-10 border theme-border-20 hover:theme-bg-20 rounded-full px-3 py-1 flex items-center gap-1 transition-colors"
                             >
                                 <i class="fa-solid fa-rotate-right text-[10px]"></i>
                                 Reset ({{ $this->activeFilterCount }})
@@ -100,12 +100,12 @@
                             wire:model.live.debounce.300ms="search"
                             placeholder="Cth: Kampas rem, 43105-KPH..."
                             autocomplete="off"
-                            class="w-full bg-slate-950 border border-slate-700 rounded-xl pl-9 pr-9 py-2.5 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-red-500/40 focus:border-red-500 transition-all"
+                            class="w-full bg-slate-950 border border-slate-700 rounded-xl pl-9 pr-9 py-2.5 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:ring-2 theme-ring-focus-40 transition-all"
                         >
                         <div
                             wire:loading.delay
                             wire:target="search"
-                            class="absolute right-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 border-2 border-red-500 border-t-transparent rounded-full animate-spin"
+                            class="absolute right-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 border-2 theme-border border-t-transparent rounded-full animate-spin"
                         ></div>
                     </div>
                 </div>
@@ -115,7 +115,7 @@
                     <div class="flex items-center justify-between mb-3">
                         <span class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">🏍️ Filter Kendaraan</span>
                         @if($selectedBrand || $selectedModel)
-                            <span class="text-[10px] bg-red-500/15 text-red-400 border border-red-500/20 rounded-full px-2 py-0.5 font-bold">
+                            <span class="text-[10px] theme-bg-15 theme-text border theme-border-20 rounded-full px-2 py-0.5 font-bold">
                                 Aktif
                             </span>
                         @endif
@@ -129,7 +129,7 @@
                     >
                         <select
                             wire:model.live="selectedBrand"
-                            class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 pr-8 py-2.5 text-sm text-slate-200 focus:outline-none focus:ring-2 focus:ring-red-500/40 focus:border-red-500 appearance-none cursor-pointer transition-all"
+                            class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 pr-8 py-2.5 text-sm text-slate-200 focus:outline-none focus:ring-2 theme-ring-focus-40 appearance-none cursor-pointer transition-all"
                             aria-label="Pilih Merek Motor"
                         >
                             <option value="">— Pilih Merek —</option>
@@ -149,7 +149,7 @@
                         <select
                             wire:model.live="selectedModel"
                             @disabled(blank($selectedBrand))
-                            class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 pr-8 py-2.5 text-sm text-slate-200 focus:outline-none focus:ring-2 focus:ring-red-500/40 focus:border-red-500 appearance-none cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+                            class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 pr-8 py-2.5 text-sm text-slate-200 focus:outline-none focus:ring-2 theme-ring-focus-40 appearance-none cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed transition-all"
                             aria-label="Pilih Model"
                         >
                             <option value="">— Pilih Model —</option>
@@ -169,7 +169,7 @@
                         <select
                             wire:model.live="selectedYear"
                             @disabled(blank($selectedModel) || empty($this->availableYears))
-                            class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 pr-8 py-2.5 text-sm text-slate-200 focus:outline-none focus:ring-2 focus:ring-red-500/40 focus:border-red-500 appearance-none cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+                            class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 pr-8 py-2.5 text-sm text-slate-200 focus:outline-none focus:ring-2 theme-ring-focus-40 appearance-none cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed transition-all"
                             aria-label="Pilih Tahun"
                         >
                             <option value="">— Pilih Tahun —</option>
@@ -182,7 +182,7 @@
 
                     {{-- Active fitment info --}}
                     @if($selectedBrand && $selectedModel)
-                        <p class="mt-2 text-xs text-red-400 bg-red-500/8 border border-red-500/15 rounded-lg px-3 py-2 leading-snug">
+                        <p class="mt-2 text-xs theme-text theme-bg-5 border theme-border-15 rounded-lg px-3 py-2 leading-snug">
                             Menampilkan sparepart untuk
                             <strong>{{ $this->bikeModels->firstWhere('slug', $selectedModel)?->name ?? $selectedModel }}</strong>{{ $selectedYear ? " tahun $selectedYear" : '' }}
                         </p>
@@ -199,11 +199,11 @@
                             wire:click="$set('selectedCategory', '')"
                             type="button"
                             class="w-full flex items-center justify-between px-3 py-2 rounded-xl cursor-pointer transition-colors text-left
-                                {{ blank($selectedCategory) ? 'bg-red-500/10 text-red-400 font-semibold' : 'text-slate-400 hover:bg-slate-800/60 hover:text-slate-200' }}"
+                                {{ blank($selectedCategory) ? 'theme-bg-10 theme-text font-semibold' : 'text-slate-400 hover:bg-slate-800/60 hover:text-slate-200' }}"
                         >
                             <span class="text-sm">Semua Kategori</span>
                             @if(blank($selectedCategory))
-                                <i class="fa-solid fa-check text-[10px] text-red-400 flex-shrink-0"></i>
+                                <i class="fa-solid fa-check text-[10px] theme-text flex-shrink-0"></i>
                             @endif
                         </button>
 
@@ -212,11 +212,11 @@
                                 wire:click="$set('selectedCategory', '{{ $cat->slug }}')"
                                 type="button"
                                 class="w-full flex items-center justify-between px-3 py-2 rounded-xl cursor-pointer transition-colors text-left
-                                    {{ $selectedCategory === $cat->slug ? 'bg-red-500/10 text-red-400 font-semibold' : 'text-slate-400 hover:bg-slate-800/60 hover:text-slate-200' }}"
+                                    {{ $selectedCategory === $cat->slug ? 'theme-bg-10 theme-text font-semibold' : 'text-slate-400 hover:bg-slate-800/60 hover:text-slate-200' }}"
                             >
                                 <span class="text-sm">{{ $cat->name }}</span>
                                 @if($selectedCategory === $cat->slug)
-                                    <i class="fa-solid fa-check text-[10px] text-red-400 flex-shrink-0"></i>
+                                    <i class="fa-solid fa-check text-[10px] theme-text flex-shrink-0"></i>
                                 @endif
                             </button>
                         @endforeach
@@ -236,7 +236,7 @@
                                 placeholder="Min"
                                 min="0"
                                 step="1000"
-                                class="w-full bg-slate-950 border border-slate-700 rounded-xl pl-8 pr-3 py-2.5 text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-red-500/40 focus:border-red-500 transition-all"
+                                class="w-full bg-slate-950 border border-slate-700 rounded-xl pl-8 pr-3 py-2.5 text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:ring-2 theme-ring-focus-40 transition-all"
                             >
                         </div>
                         <span class="text-slate-600 font-bold flex-shrink-0">–</span>
@@ -248,7 +248,7 @@
                                 placeholder="Max"
                                 min="0"
                                 step="1000"
-                                class="w-full bg-slate-950 border border-slate-700 rounded-xl pl-8 pr-3 py-2.5 text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-red-500/40 focus:border-red-500 transition-all"
+                                class="w-full bg-slate-950 border border-slate-700 rounded-xl pl-8 pr-3 py-2.5 text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:ring-2 theme-ring-focus-40 transition-all"
                             >
                         </div>
                     </div>
@@ -264,7 +264,8 @@
                     >
                         <span class="text-sm text-slate-300 leading-snug">Tampilkan Stok Tersedia Saja</span>
                         <div class="relative flex-shrink-0">
-                            <div class="w-10 h-5 {{ $inStockOnly ? 'bg-red-600 border-red-500' : 'bg-slate-700 border-slate-600' }} rounded-full transition-colors border">
+                            <div class="w-10 h-5 rounded-full transition-colors border"
+                                 style="background-color:{{ $inStockOnly ? 'var(--c-primary)' : '#475569' }};border-color:{{ $inStockOnly ? 'var(--c-primary)' : '#475569' }};">
                                 <div class="absolute top-0.5 {{ $inStockOnly ? 'left-5' : 'left-0.5' }} w-4 h-4 bg-white rounded-full shadow-sm transition-all duration-200"></div>
                             </div>
                         </div>
@@ -299,7 +300,7 @@
                             </span>
                         @endif
                         @if($this->activeFilterCount > 0)
-                            <span class="text-xs bg-red-500/10 text-red-400 border border-red-500/15 rounded-full px-2.5 py-0.5 font-semibold">
+                            <span class="text-xs theme-bg-10 theme-text border theme-border-15 rounded-full px-2.5 py-0.5 font-semibold">
                                 {{ $this->activeFilterCount }} filter aktif
                             </span>
                         @endif
@@ -309,7 +310,7 @@
                         wire:target="search,selectedBrand,selectedModel,selectedYear,selectedCategory,priceMin,priceMax,inStockOnly,isFeaturedOnly,sortBy"
                         class="flex items-center gap-2 text-sm text-slate-500"
                     >
-                        <div class="w-3.5 h-3.5 border-2 border-red-500 border-t-transparent rounded-full animate-spin"></div>
+                        <div class="w-3.5 h-3.5 border-2 theme-border border-t-transparent rounded-full animate-spin"></div>
                         Memuat...
                     </div>
                 </div>
@@ -323,10 +324,10 @@
                         @click="sidebarOpen = true"
                         aria-label="Buka filter"
                     >
-                        <i class="fa-solid fa-sliders text-red-500 text-sm"></i>
+                        <i class="fa-solid fa-sliders theme-text text-sm"></i>
                         Filter
                         @if($this->activeFilterCount > 0)
-                            <span class="absolute -top-1.5 -right-1.5 w-5 h-5 bg-red-600 text-white rounded-full text-[10px] font-bold flex items-center justify-center">
+                            <span class="absolute -top-1.5 -right-1.5 w-5 h-5 theme-bg text-white rounded-full text-[10px] font-bold flex items-center justify-center">
                                 {{ $this->activeFilterCount }}
                             </span>
                         @endif
@@ -336,7 +337,7 @@
                     <div class="relative">
                         <select
                             wire:model.live="sortBy"
-                            class="bg-slate-900 border border-slate-700 rounded-xl px-3 pr-8 py-2 text-sm text-slate-300 focus:outline-none focus:ring-2 focus:ring-red-500/30 appearance-none cursor-pointer transition-all"
+                            class="bg-slate-900 border border-slate-700 rounded-xl px-3 pr-8 py-2 text-sm text-slate-300 focus:outline-none focus:ring-2 theme-ring-focus-30 appearance-none cursor-pointer transition-all"
                             aria-label="Urutkan produk"
                         >
                             <option value="-created_at">Terbaru</option>
@@ -353,7 +354,7 @@
                     <div class="relative">
                         <select
                             wire:model.live="perPage"
-                            class="bg-slate-900 border border-slate-700 rounded-xl px-3 pr-8 py-2 text-sm text-slate-300 focus:outline-none focus:ring-2 focus:ring-red-500/30 appearance-none cursor-pointer transition-all"
+                            class="bg-slate-900 border border-slate-700 rounded-xl px-3 pr-8 py-2 text-sm text-slate-300 focus:outline-none focus:ring-2 theme-ring-focus-30 appearance-none cursor-pointer transition-all"
                             aria-label="Produk per halaman"
                         >
                             <option value="12">12</option>
@@ -384,11 +385,11 @@
                                 Coba ubah filter atau
                                 <button
                                     wire:click="resetFilters"
-                                    class="text-red-400 underline hover:text-red-300 transition-colors"
+                                    class="theme-text underline hover:theme-text-light transition-colors"
                                 >hapus semua filter</button>
                             </p>
                             <div class="inline-flex items-center gap-2 text-xs text-slate-600 bg-slate-800/60 border border-slate-700 rounded-xl px-4 py-2.5">
-                                <i class="fa-solid fa-circle-info text-red-500/70"></i>
+                                <i class="fa-solid fa-circle-info theme-text opacity-70"></i>
                                 Tidak ada produk yang cocok dengan kombinasi filter yang dipilih.
                             </div>
                         </div>
