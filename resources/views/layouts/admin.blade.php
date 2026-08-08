@@ -525,7 +525,8 @@
                     <div style="position:relative;">
                         <button style="width:38px;height:38px;border-radius:10px;background:#f1f5f9;border:1px solid #e2e8f0;display:flex;align-items:center;justify-content:center;color:#64748b;cursor:pointer;transition:all 0.2s;"
                                 onmouseover="this.style.background='#e2e8f0'"
-                                onmouseout="this.style.background='#f1f5f9'">
+                                onmouseout="this.style.background='#f1f5f9'"
+                                onclick="alert('Belum ada notifikasi baru.')">
                             <i class="fa-solid fa-bell" style="font-size:0.9rem;"></i>
                         </button>
                         <span class="notif-dot"></span>
