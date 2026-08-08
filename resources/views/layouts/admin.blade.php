@@ -386,7 +386,7 @@
                 </div>
                 <div>
                     <div style="font-family:'Outfit',sans-serif;font-weight:900;font-size:1.05rem;color:#fff;letter-spacing:-0.3px;line-height:1.1;">Admin Console</div>
-                    <div style="font-size:0.65rem;color:rgba(255,255,255,0.25);font-weight:600;letter-spacing:0.08em;text-transform:uppercase;margin-top:1px;">MyCommerce Platform</div>
+                    <div style="font-size:0.65rem;color:rgba(255,255,255,0.25);font-weight:600;letter-spacing:0.08em;text-transform:uppercase;margin-top:1px;">{{ \App\Models\Setting::getValue('store_name') ?? config('app.name', 'Xenzustore') }} PLATFORM</div>
                 </div>
             </div>
 
