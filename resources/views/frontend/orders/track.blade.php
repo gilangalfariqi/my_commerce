@@ -23,10 +23,13 @@
 
             @if($order)
                 <div class="border-t border-gray-100 pt-8 space-y-6 text-sm">
+                    @php
+                        $statusVal = is_object($order->status) ? $order->status->value : (string) $order->status;
+                    @endphp
                     <div class="flex justify-between items-center bg-gray-50 p-4 rounded-2xl border border-gray-100">
                         <div>
-                            <p class="text-xs text-gray-400">Current Status</p>
-                            <p class="font-bold text-gray-900 uppercase mt-0.5 text-xs">{{ $order->status->value }}</p>
+                            <p class="text-xs text-gray-400">Status Pesanan</p>
+                            <p class="font-bold text-gray-900 uppercase mt-0.5 text-xs">{{ $statusVal }}</p>
                         </div>
                         <span class="w-9 h-9 rounded-xl bg-primary-100 text-primary-700 flex items-center justify-center"><i class="fa-solid fa-box-open"></i></span>
                     </div>
@@ -40,30 +43,30 @@
                             </div>
                         </div>
 
-                        @if($order->status->value !== 'pending' && $order->status->value !== 'cancelled')
+                        @if(!in_array($statusVal, ['pending', 'cancelled']))
                             <div class="flex gap-4">
                                 <span class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-[10px] flex-shrink-0 mt-0.5"><i class="fa-solid fa-check"></i></span>
                                 <div>
-                                    <h3 class="font-semibold text-gray-900">Payment Confirmed</h3>
-                                    <p class="text-xs text-gray-500 mt-0.5">Payment successfully processed via Midtrans.</p>
+                                    <h3 class="font-semibold text-gray-900">Pembayaran Dikonfirmasi</h3>
+                                    <p class="text-xs text-gray-500 mt-0.5">Pembayaran telah dikonfirmasi oleh toko.</p>
                                 </div>
                             </div>
                         @endif
 
-                        @if(in_array($order->status->value, ['shipped', 'delivered']))
+                        @if(in_array($statusVal, ['shipped', 'delivered']))
                             <div class="flex gap-4">
                                 <span class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-[10px] flex-shrink-0 mt-0.5"><i class="fa-solid fa-check"></i></span>
                                 <div>
-                                    <h3 class="font-semibold text-gray-900">Shipped Out</h3>
-                                    <p class="text-xs text-gray-500 mt-0.5">Package handed over to {{ strtoupper($order->courier) }} ({{ $order->shipping_service }}).</p>
-                                    @if($order->shipping_tracking_number)
-                                        <p class="text-xs text-primary-600 font-bold mt-1.5 bg-primary-50 px-2.5 py-1.5 rounded-lg border border-primary-100 select-all w-fit">Tracking Code: {{ $order->shipping_tracking_number }}</p>
+                                    <h3 class="font-semibold text-gray-900">Pesanan Dikirim</h3>
+                                    <p class="text-xs text-gray-500 mt-0.5">Paket diteruskan ke {{ strtoupper($order->courier ?? 'kurir') }}.</p>
+                                    @if($order->tracking_number)
+                                        <p class="text-xs text-primary-600 font-bold mt-1.5 bg-primary-50 px-2.5 py-1.5 rounded-lg border border-primary-100 select-all w-fit">Resi: {{ $order->tracking_number }}</p>
                                     @endif
                                 </div>
                             </div>
                         @endif
 
-                        @if($order->status->value === 'delivered')
+                        @if($statusVal === 'delivered')
                             <div class="flex gap-4">
                                 <span class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-[10px] flex-shrink-0 mt-0.5"><i class="fa-solid fa-check"></i></span>
                                 <div>

@@ -42,7 +42,7 @@
 <div x-data="pdpPage()" class="pb-16 lg:pb-12">
 
     {{-- ── Breadcrumb ── --}}
-    <nav aria-label="Breadcrumb" class="-mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 py-3 bg-slate-950/60 border-b border-slate-900/60 mb-6 sm:mb-8">
+    <nav aria-label="Breadcrumb" class="-mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 py-3 bg-slate-950/40 backdrop-blur-md border-b border-white/5 mb-6 sm:mb-8">
         <ol class="flex items-center flex-wrap gap-x-2 gap-y-1 text-xs text-slate-500 max-w-7xl mx-auto">
             <li>
                 <a href="{{ url('/') }}" class="text-slate-400 hover:theme-text font-medium transition-colors">Home</a>
@@ -75,7 +75,7 @@
             @endphp
 
             {{-- 1. Desktop Image Gallery (Zoomable) --}}
-            <div class="hidden lg:block relative bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden aspect-square group animate-fade-in-up"
+            <div class="hidden lg:block relative bg-slate-900/60 backdrop-blur-2xl border border-white/5 rounded-3xl overflow-hidden aspect-square group animate-fade-in-up"
                 @mousemove="handleZoom($event, $el)"
                 @mouseleave="zoomActive = false">
 
@@ -116,7 +116,7 @@
             </div>
 
             {{-- 2. Mobile Image Gallery (Swipeable) --}}
-            <div class="lg:hidden relative bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden aspect-square animate-fade-in-up">
+            <div class="lg:hidden relative bg-slate-900/60 backdrop-blur-2xl border border-white/5 rounded-3xl overflow-hidden aspect-square animate-fade-in-up">
                 <div 
                     id="mobile-gallery-scroller"
                     class="flex h-full overflow-x-auto snap-x snap-mandatory scroll-smooth scrollbar-none"
@@ -148,7 +148,7 @@
 
                 {{-- Page Counter Indicator --}}
                 @if($allMedia->count() > 1)
-                <div class="absolute bottom-3 right-3 bg-slate-950/80 backdrop-blur-sm border border-slate-800 text-slate-300 text-[10px] font-semibold px-2.5 py-1 rounded-full z-20 flex items-center gap-1 shadow-sm">
+                <div class="absolute bottom-3 right-3 bg-slate-950/80 backdrop-blur-xl border border-white/10 text-slate-300 text-[10px] font-semibold px-2.5 py-1 rounded-full z-20 flex items-center gap-1 shadow-sm">
                     <i class="fa-regular fa-image text-slate-500"></i>
                     <span><span x-text="activeIndex + 1"></span>/{{ $allMedia->count() }}</span>
                 </div>
@@ -160,8 +160,8 @@
             <div class="flex gap-2 mt-3 overflow-x-auto scrollbar-none snap-x -mx-4 px-4 sm:mx-0 sm:px-0 py-1">
                 @foreach($allMedia as $index => $media)
                 <button
-                    class="w-14 h-14 sm:w-16 sm:h-16 rounded-xl overflow-hidden border-2 transition-all duration-200 bg-slate-900 flex-shrink-0 snap-start"
-                    :class="activeIndex === {{ $index }} ? 'scale-105 theme-border shadow-md' : 'border-slate-800 hover:border-slate-600'"
+                    class="w-14 h-14 sm:w-16 sm:h-16 rounded-xl overflow-hidden border-2 transition-all duration-300 bg-slate-900/60 backdrop-blur-xl flex-shrink-0 snap-start"
+                    :class="activeIndex === {{ $index }} ? 'scale-105 theme-border shadow-md' : 'border-white/5 hover:border-white/20'"
                     :style="activeIndex === {{ $index }} ? 'box-shadow: 0 4px 12px color-mix(in srgb, var(--c-primary) 25%, transparent)' : ''"
                     @click="setImage('{{ $media->getUrl('hd') }}', {{ $index }})"
                     aria-label="Foto produk {{ $index + 1 }}"
@@ -244,7 +244,7 @@
 
             {{-- Vehicle Fitment Table / List --}}
             @if($product->fitments->isNotEmpty())
-            <div class="bg-slate-900/60 border border-slate-850 rounded-2xl overflow-hidden shadow-inner">
+            <div class="bg-slate-900/60 backdrop-blur-2xl border border-white/5 rounded-3xl overflow-hidden shadow-inner">
                 <div class="px-4 py-3 bg-slate-900/80 border-b border-slate-850 flex items-center gap-2">
                     <span class="text-sm">🏍️</span>
                     <h2 class="text-xs sm:text-sm font-bold text-slate-300">Kompatibilitas Kendaraan</h2>
@@ -343,7 +343,7 @@
                 </div>
 
                 {{-- Manual Selector Widget --}}
-                <div x-show="!fitmentSelected" class="bg-slate-950/40 border border-slate-850 rounded-2xl p-4 transition-all duration-300 hover:border-slate-800" x-data="{ showGarageSelector: false }">
+                <div x-show="!fitmentSelected" class="bg-slate-950/40 backdrop-blur-md border border-white/5 rounded-3xl p-4 transition-all duration-300 hover:border-white/20" x-data="{ showGarageSelector: false }">
                     <div class="flex items-center justify-between cursor-pointer" @click="showGarageSelector = !showGarageSelector">
                         <label class="text-[11px] font-bold text-slate-300 uppercase tracking-wider flex items-center gap-2 select-none cursor-pointer">
                             🔧 Sesuaikan dengan Motor Saya (Opsional)
@@ -358,7 +358,7 @@
                         {{-- Brand --}}
                         <div class="relative">
                             <select x-model="garageBrand" @change="garageModel=''; garageYear=''"
-                                class="w-full bg-slate-900 border border-slate-850 rounded-xl px-3 py-2 text-xs font-semibold text-slate-200 focus:outline-none focus:ring-1 theme-ring-focus-40 appearance-none cursor-pointer transition-all hover:bg-slate-800"
+                                class="w-full bg-slate-900/50 backdrop-blur-sm border border-white/10 rounded-xl px-3 py-2 text-xs font-semibold text-slate-200 focus:outline-none focus:ring-1 theme-ring-focus-40 appearance-none cursor-pointer transition-all hover:bg-slate-800 focus:bg-slate-900 shadow-inner"
                                 aria-label="Merek motor">
                                 <option value="">Pilih Merek</option>
                                 @foreach($product->fitments->groupBy('bikeBrand.name') as $brandName => $models)
@@ -371,7 +371,7 @@
                         {{-- Model --}}
                         <div class="relative">
                             <select x-model="garageModel" :disabled="!garageBrand"
-                                class="w-full bg-slate-900 border border-slate-850 rounded-xl px-3 py-2 text-xs font-semibold text-slate-200 focus:outline-none focus:ring-1 theme-ring-focus-40 appearance-none cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed transition-all hover:bg-slate-800"
+                                class="w-full bg-slate-900/50 backdrop-blur-sm border border-white/10 rounded-xl px-3 py-2 text-xs font-semibold text-slate-200 focus:outline-none focus:ring-1 theme-ring-focus-40 appearance-none cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed transition-all hover:bg-slate-800 focus:bg-slate-900 shadow-inner"
                                 aria-label="Model motor">
                                 <option value="">Pilih Model</option>
                                 @foreach($product->fitments as $fitment)
@@ -386,7 +386,7 @@
                         {{-- Year --}}
                         <div class="relative">
                             <select x-model="garageYear" :disabled="!garageModel"
-                                class="w-full bg-slate-900 border border-slate-850 rounded-xl px-3 py-2 text-xs font-semibold text-slate-200 focus:outline-none focus:ring-1 theme-ring-focus-40 appearance-none cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed transition-all hover:bg-slate-800"
+                                class="w-full bg-slate-900/50 backdrop-blur-sm border border-white/10 rounded-xl px-3 py-2 text-xs font-semibold text-slate-200 focus:outline-none focus:ring-1 theme-ring-focus-40 appearance-none cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed transition-all hover:bg-slate-800 focus:bg-slate-900 shadow-inner"
                                 aria-label="Tahun motor">
                                 <option value="">Tahun</option>
                                 @foreach($product->fitments as $fitment)
@@ -436,7 +436,7 @@
 
     {{-- ── Full Description ── --}}
     @if($product->description)
-    <section class="bg-slate-900/40 border border-slate-850 rounded-3xl p-5 sm:p-8 mb-10 animate-fade-in-up" style="animation-delay: 200ms;">
+    <section class="bg-slate-900/60 backdrop-blur-2xl border border-white/5 rounded-3xl p-5 sm:p-8 mb-10 animate-fade-in-up" style="animation-delay: 200ms;">
         <h2 class="text-lg sm:text-xl font-bold text-white mb-4 pb-3 border-b border-slate-850 flex items-center gap-3">
             <span class="w-7 h-7 rounded-lg theme-bg-10 theme-text flex items-center justify-center text-xs flex-shrink-0">
                 <i class="fa-solid fa-file-lines"></i>
@@ -444,7 +444,9 @@
             Deskripsi Produk
         </h2>
         <div class="prose prose-invert prose-xs sm:prose-sm max-w-3xl prose-p:text-slate-400 prose-headings:text-slate-200 prose-strong:text-slate-200 prose-a-theme-text prose-li:text-slate-400 leading-relaxed text-justify">
-            {!! $product->description !!}
+            {{-- Sanitasi HTML dengan HTMLPurifier (mews/purifier) untuk mencegah XSS.
+                 HTML yang valid (bold, paragraf, tabel, list) tetap dirender, script/event handlers dihapus. --}}
+            {!! clean($product->description) !!}
         </div>
     </section>
     @endif

@@ -238,9 +238,9 @@ class MetaService
      */
     private function defaultOgImage(): ?string
     {
-        $path = public_path('images/og-default.webp');
+        $path = public_path('images/og-default.jpg');
         if (file_exists($path)) {
-            return $this->appUrl . '/images/og-default.webp';
+            return $this->appUrl . '/images/og-default.jpg';
         }
         return null;
     }

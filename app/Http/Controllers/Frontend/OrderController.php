@@ -4,20 +4,21 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
-use App\Enums\OrderStatus;
-use App\Enums\PaymentStatus;
 use Illuminate\Contracts\View\View;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
 
+/**
+ * Frontend Order Controller
+ *
+ * Menampilkan riwayat pesanan user dan detail pesanan.
+ * Alur pembayaran menggunakan WhatsApp Checkout — tidak ada Midtrans/payment gateway.
+ */
 class OrderController extends Controller
 {
     public function index(): View
     {
         $orders = Order::where('user_id', auth()->id())
-            ->with(['payment', 'items'])
+            ->with(['items'])
             ->latest()
             ->paginate(10);
 
@@ -28,12 +29,23 @@ class OrderController extends Controller
     {
         $order = Order::where('order_number', $orderNumber)
             ->where('user_id', auth()->id())
-            ->with(['payment', 'items.product.primaryImage', 'shippingAddress'])
+            ->with(['items.product.primaryImage', 'shippingAddress'])
             ->firstOrFail();
 
-        return view('frontend.orders.show', compact('order'));
+        // Buat link WhatsApp untuk menghubungi toko terkait pesanan ini
+        $rawWaNumber = \App\Models\Setting::getValue('store_whatsapp') ?? config('services.whatsapp.number', '');
+        $waNumber    = preg_replace('/\D+/', '', (string) $rawWaNumber);
+        $waContactUrl = $waNumber
+            ? 'https://wa.me/' . $waNumber . '?text=' . rawurlencode("Halo, saya ingin menanyakan status pesanan *{$orderNumber}*.")
+            : null;
+
+        return view('frontend.orders.show', compact('order', 'waContactUrl'));
     }
 
+    /**
+     * Order tracking publik — dilindungi throttle:5,1 di routes/web.php
+     * untuk mencegah enumerasi nomor pesanan.
+     */
     public function track(Request $request): View
     {
         $order = null;
@@ -44,53 +56,5 @@ class OrderController extends Controller
         }
 
         return view('frontend.orders.track', compact('order'));
-    }
-
-    public function syncStatus(string $orderNumber): JsonResponse
-    {
-        $order = Order::where('order_number', $orderNumber)
-            ->where('user_id', auth()->id())
-            ->with('payment')
-            ->firstOrFail();
-
-        $serverKey = config('midtrans.server_key');
-        $isProduction = config('midtrans.is_production', false);
-        $baseUrl = $isProduction 
-            ? 'https://api.midtrans.com/v2' 
-            : 'https://api.sandbox.midtrans.com/v2';
-
-        try {
-            $response = Http::withBasicAuth($serverKey, '')
-                ->get("{$baseUrl}/{$orderNumber}/status");
-
-            if ($response->successful()) {
-                $statusData = $response->json();
-                $transactionStatus = $statusData['transaction_status'] ?? null;
-                $fraudStatus = $statusData['fraud_status'] ?? null;
-                $payment = $order->payment;
-
-                if ($payment) {
-                    if (in_array($transactionStatus, ['capture', 'settlement'])) {
-                        if ($fraudStatus === null || $fraudStatus === 'accept') {
-                            $payment->update(['status' => PaymentStatus::SETTLED]);
-                            $order->update(['status' => OrderStatus::PROCESSING]);
-                        }
-                    } elseif (in_array($transactionStatus, ['cancel', 'deny', 'expire'])) {
-                        $payment->update(['status' => PaymentStatus::EXPIRED]);
-                        $order->update(['status' => OrderStatus::CANCELLED]);
-                    }
-                }
-
-                return response()->json([
-                    'success' => true,
-                    'status' => $order->status->value,
-                    'payment_status' => $payment?->status->value,
-                ]);
-            }
-        } catch (\Exception $e) {
-            Log::error("Order sync status failed for {$orderNumber}: " . $e->getMessage());
-        }
-
-        return response()->json(['success' => false, 'message' => 'Unable to sync status at this time.'], 500);
     }
 }

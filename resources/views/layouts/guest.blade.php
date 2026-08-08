@@ -447,17 +447,21 @@
                 <div class="logo-icon">
                     <i class="fa-solid fa-store"></i>
                 </div>
-                <div class="logo-title">MyCommerce</div>
+                <div class="logo-title">{{ \App\Models\Setting::getValue('store_name') ?? config('app.name', 'Xenzustore') }}</div>
                 <div class="logo-subtitle">Admin Control Panel</div>
             </div>
 
             {{ $slot }}
 
-            <!-- Register link (optional) -->
-            @if (Route::has('register'))
-            <div class="register-row">
-                Belum punya akun? <a href="{{ route('register') }}">Daftar sekarang</a>
-            </div>
+            <!-- Register / Login link -->
+            @if (Route::currentRouteName() == 'register')
+                <div class="register-row">
+                    Sudah punya akun? <a href="{{ route('login') }}">Masuk di sini</a>
+                </div>
+            @elseif (Route::has('register'))
+                <div class="register-row">
+                    Belum punya akun? <a href="{{ route('register') }}">Daftar sekarang</a>
+                </div>
             @endif
         </div>
 

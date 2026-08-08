@@ -2,28 +2,21 @@
 
 namespace App\Providers;
 
-use App\Models\Setting;
-use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
+/**
+ * SettingServiceProvider
+ *
+ * Catatan: View composer untuk $siteSettings sudah didaftarkan
+ * di AppServiceProvider::boot() dengan static cache yang lebih baik.
+ * Provider ini dipertahankan agar tidak perlu mengubah config/app.php
+ * tapi tidak mendaftarkan view composer duplikat.
+ */
 class SettingServiceProvider extends ServiceProvider
 {
     public function boot(): void
     {
-        // Share $siteSettings to ALL views automatically
-        View::composer('*', function ($view) {
-            static $settings = null;
-
-            if ($settings === null) {
-                try {
-                    $settings = Setting::all()->pluck('value', 'key');
-                } catch (\Throwable $e) {
-                    // DB not ready (e.g. during migration) — use empty collection
-                    $settings = collect();
-                }
-            }
-
-            $view->with('siteSettings', $settings);
-        });
+        // View composer untuk $siteSettings sudah ditangani oleh AppServiceProvider.
+        // Tidak ada registrasi duplikat di sini untuk menghindari double DB query.
     }
 }

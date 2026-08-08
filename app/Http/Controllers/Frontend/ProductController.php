@@ -122,13 +122,17 @@ class ProductController extends Controller
 
         // Related products in the same category, excluding current product
         $categoryIds = $product->categories->pluck('id')->toArray();
+        // Menggunakan latest() + slice+shuffle di PHP, bukan ORDER BY RAND() di MySQL.
+        // ORDER BY RAND() sangat lambat pada tabel besar karena tidak bisa menggunakan index.
         $relatedProducts = Product::active()
             ->whereHas('categories', fn ($q) => $q->whereIn('categories.id', $categoryIds))
             ->where('id', '!=', $product->id)
             ->with(['media'])
-            ->inRandomOrder()
-            ->take(4)
-            ->get();
+            ->latest()
+            ->take(16)
+            ->get()
+            ->shuffle()
+            ->take(4);
 
         // SEO
         $this->metaService->setForProduct($product);

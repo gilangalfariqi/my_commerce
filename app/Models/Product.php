@@ -388,14 +388,15 @@ class Product extends Model implements HasMedia
      */
     public function getWhatsAppLink(?array $fitmentContext = null): string
     {
-        $waNumber = config('app.whatsapp_number', env('WHATSAPP_NUMBER', '6282174128947'));
+        $waNumber = preg_replace('/\D+/', '', config('services.whatsapp.number', '6282174128947'));
+        $storeName = \App\Models\Setting::getValue('store_name') ?? config('app.name', 'Toko Kami');
 
         $productUrl = route('products.show', $this->slug);
 
-        $message = "Halo, saya tertarik dengan produk:\n";
-        $message .= "🔧 *{$this->name}*\n";
-        $message .= "📦 SKU/OEM: `{$this->sku}`\n";
-        $message .= "💰 Harga: Rp " . number_format($this->getFinalPrice(), 0, ',', '.') . "\n";
+        $message = "Halo {$storeName}, saya ingin menanyakan ketersediaan produk berikut:\n";
+        $message .= "- {$this->name}\n";
+        $message .= "  SKU/OEM: {$this->sku}\n";
+        $message .= "  Harga: Rp " . number_format($this->getFinalPrice(), 0, ',', '.') . "\n";
 
         if (! empty($fitmentContext)) {
             $message .= "\n🏍️ Kendaraan saya:\n";

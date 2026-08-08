@@ -28,14 +28,17 @@ class AppServiceProvider extends ServiceProvider
         Paginator::useTailwind();
 
         // ── Global View Composer ──
-        // Inject $siteSettings into EVERY view automatically.
-        // Uses a static cache so DB is only queried once per request.
+        // Inject $siteSettings ke setiap view secara otomatis.
+        // Menggunakan static cache agar DB hanya di-query sekali per request lifecycle.
+        // CATATAN: reject(null|'') dihapus — nilai empty string bisa jadi valid
+        // (contoh: footer_copyright yang sengaja dikosongkan oleh admin).
         View::composer('*', function ($view) {
             static $cache = null;
             if ($cache === null) {
                 try {
-                    $cache = Setting::all()->pluck('value', 'key')->reject(fn($val) => $val === null || $val === '');
+                    $cache = Setting::all()->pluck('value', 'key');
                 } catch (\Throwable $e) {
+                    // DB belum siap (misal saat migrasi) — gunakan koleksi kosong
                     $cache = collect();
                 }
             }

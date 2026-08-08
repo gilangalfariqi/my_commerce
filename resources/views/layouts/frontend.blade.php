@@ -172,8 +172,8 @@
 
 <body class="antialiased text-slate-200 pb-28 md:pb-0" x-data="{ mobileSearchOpen: false }">
 
-    <!-- Main Navigation Header (Glassmorphic Dark) -->
-    <header class="sticky top-0 z-40 bg-slate-950/80 backdrop-blur-xl border-b border-slate-900/80 shadow-premium transition-all duration-300">
+    <!-- Main Navigation Header (Glassmorphic) -->
+    <header class="sticky top-0 z-40 bg-slate-950/60 backdrop-blur-2xl border-b border-white/5 shadow-premium transition-all duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-6">
             
             <!-- Logo -->
@@ -205,7 +205,7 @@
                     <i class="fa-solid fa-magnifying-glass absolute left-5 top-1/2 -translate-y-1/2 text-slate-500 text-sm group-focus-within:text-primary-500 transition-colors"></i>
                 </div>
                 <!-- Suggestions Dropdown -->
-                <div x-show="suggestions.length > 0" x-cloak class="absolute left-0 right-0 top-full mt-3 bg-slate-900/95 backdrop-blur-md border border-slate-800 rounded-3xl shadow-premium z-50 overflow-hidden" @click.away="suggestions = []">
+                <div x-show="suggestions.length > 0" x-cloak class="absolute left-0 right-0 top-full mt-3 bg-slate-900/80 backdrop-blur-2xl border border-white/5 rounded-3xl shadow-premium-hover z-50 overflow-hidden" @click.away="suggestions = []">
                     <div class="px-4 py-2 bg-slate-950 text-[10px] font-bold text-slate-500 uppercase tracking-wider">Hasil Pencarian</div>
                     <template x-for="item in suggestions" :key="item.slug">
                         <a :href="item.url" class="flex items-center gap-4 p-3.5 hover:bg-slate-800/80 border-b border-slate-850 last:border-0 transition-colors duration-200">
@@ -279,7 +279,7 @@
     </header>
 
     <!-- Mobile Search Panel (Slide down) -->
-    <div x-show="mobileSearchOpen" x-cloak x-transition:enter="transition ease-out duration-250" x-transition:enter-start="-translate-y-4 opacity-0" x-transition:enter-end="translate-y-0 opacity-100" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="translate-y-0 opacity-100" x-transition:leave-end="-translate-y-4 opacity-0" class="md:hidden bg-slate-900/95 backdrop-blur-md border-b border-slate-800 px-4 py-3.5 shadow-md sticky top-20 z-30">
+    <div x-show="mobileSearchOpen" x-cloak x-transition:enter="transition ease-out duration-300" x-transition:enter-start="-translate-y-4 opacity-0" x-transition:enter-end="translate-y-0 opacity-100" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="translate-y-0 opacity-100" x-transition:leave-end="-translate-y-4 opacity-0" class="md:hidden bg-slate-950/80 backdrop-blur-2xl border-b border-white/5 px-4 py-3.5 shadow-lg sticky top-20 z-30">
         <div class="relative w-full" x-data="searchAutocomplete()">
             <input 
                 type="text" 
@@ -447,7 +447,7 @@
             <div class="absolute inset-0 overflow-hidden">
                 <div class="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-4 sm:pl-10">
                     <div x-show="$store.cart.cartOpen" x-transition:enter="transform transition ease-in-out duration-300" x-transition:enter-start="translate-x-full" x-transition:enter-end="translate-x-0" x-transition:leave="transform transition ease-in-out duration-300" x-transition:leave-start="translate-x-0" x-transition:leave-end="translate-x-full" class="pointer-events-auto w-screen max-w-md">
-                        <div class="flex h-full flex-col overflow-y-scroll bg-slate-900 text-slate-100 shadow-2xl border-l border-slate-800">
+                        <div class="flex h-full flex-col bg-slate-900/90 backdrop-blur-2xl text-slate-100 shadow-2xl border-l border-white/5">
                             <div class="flex-1 overflow-y-auto px-4 sm:px-6 py-6 sm:py-8">
                                 <div class="flex items-start justify-between">
                                     <h2 class="text-xl font-bold text-white" id="slide-over-title">Keranjang Belanja</h2>
@@ -538,7 +538,7 @@
     </div>
 
     <!-- Sticky Floating Bottom Navigation (Mobile-first Navigation) -->
-    <div class="md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 bg-slate-900/90 backdrop-blur-xl border border-slate-800/80 flex justify-around py-3 px-4 z-40 shadow-premium-hover rounded-full w-[90%] max-w-sm">
+    <div class="md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 bg-slate-900/80 backdrop-blur-2xl border border-white/10 flex justify-around py-3 px-4 z-40 shadow-premium-hover rounded-full w-[90%] max-w-sm transition-all duration-300">
         <a href="{{ route('home') }}" class="flex flex-col items-center gap-0.5 text-slate-500 hover:text-primary-500 transition-colors {{ request()->routeIs('home') ? 'text-primary-500 font-bold' : '' }}">
             <i class="fa-solid fa-house text-base"></i>
             <span class="text-[9px] tracking-wide uppercase font-semibold">Home</span>

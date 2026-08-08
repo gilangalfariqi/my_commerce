@@ -223,7 +223,7 @@
         }
     }"
 >
-    <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 relative overflow-hidden">
+    <div class="bg-slate-900/80 backdrop-blur-2xl border border-white/5 rounded-3xl p-6 sm:p-8 relative overflow-hidden">
         {{-- Decorative glow --}}
         <div class="absolute -right-20 -top-20 w-56 h-56 bg-red-600/8 rounded-full blur-3xl pointer-events-none"></div>
         <div class="absolute -left-10 bottom-0 w-40 h-40 bg-red-900/10 rounded-full blur-2xl pointer-events-none"></div>
@@ -251,7 +251,7 @@
                         x-model="brand"
                         @change="onBrandChange()"
                         :disabled="loadingBrands"
-                        class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-sm font-medium text-slate-200 focus:outline-none focus:ring-2 focus:ring-red-500/40 focus:border-red-500 appearance-none cursor-pointer disabled:opacity-50 transition-all"
+                        class="w-full bg-slate-950/50 backdrop-blur-md border border-white/10 rounded-xl px-4 py-3 text-sm font-medium text-slate-100 focus:outline-none focus:ring-2 focus:ring-red-500/40 focus:border-red-500 focus:bg-slate-950 appearance-none cursor-pointer disabled:opacity-50 transition-all shadow-inner"
                         aria-label="Pilih Merek Motor"
                     >
                         <option value="">Pilih Merek Motor</option>
@@ -273,7 +273,7 @@
                         x-model="model"
                         @change="onModelChange()"
                         :disabled="!brand || loadingModels"
-                        class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-sm font-medium text-slate-200 focus:outline-none focus:ring-2 focus:ring-red-500/40 focus:border-red-500 appearance-none cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+                        class="w-full bg-slate-950/50 backdrop-blur-md border border-white/10 rounded-xl px-4 py-3 text-sm font-medium text-slate-100 focus:outline-none focus:ring-2 focus:ring-red-500/40 focus:border-red-500 focus:bg-slate-950 appearance-none cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed transition-all shadow-inner"
                         aria-label="Pilih Model Motor"
                     >
                         <option value="">Pilih Model</option>
@@ -294,7 +294,7 @@
                     <select
                         x-model="year"
                         :disabled="!model || years.length === 0 || loadingYears"
-                        class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-sm font-medium text-slate-200 focus:outline-none focus:ring-2 focus:ring-red-500/40 focus:border-red-500 appearance-none cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+                        class="w-full bg-slate-950/50 backdrop-blur-md border border-white/10 rounded-xl px-4 py-3 text-sm font-medium text-slate-100 focus:outline-none focus:ring-2 focus:ring-red-500/40 focus:border-red-500 focus:bg-slate-950 appearance-none cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed transition-all shadow-inner"
                         aria-label="Pilih Tahun"
                     >
                         <option value="">Pilih Tahun</option>
@@ -418,7 +418,7 @@
             @php $icon = $categoryIconMap[$category->slug] ?? 'fa-gears'; @endphp
             <a
                 href="{{ route('products.index', ['category' => $category->slug]) }}"
-                class="group w-[96px] sm:w-[130px] flex-shrink-0 snap-start bg-slate-900 border border-slate-800 theme-card-hover rounded-2xl p-2.5 sm:p-5 text-center hover:bg-slate-800/70 transition-all duration-300 animate-category-float"
+                class="group w-[96px] sm:w-[130px] flex-shrink-0 snap-start bg-slate-900/60 backdrop-blur-xl border border-white/5 theme-card-hover rounded-3xl p-2.5 sm:p-5 text-center hover:bg-slate-800/80 transition-all duration-300 animate-category-float"
                 style="animation-delay: {{ $loop->index * 0.25 }}s;"
             >
                 @if($category->url)
@@ -444,7 +444,7 @@
 <section class="mb-14" id="flash-sale"
     x-data="countdownTimer('{{ $flashSale->end_time->toIso8601String() }}')"
 >
-    <div class="bg-gradient-to-br from-slate-900 via-slate-900 to-slate-950 border border-slate-800 rounded-3xl p-6 sm:p-10 relative overflow-hidden">
+    <div class="bg-gradient-to-br from-slate-900/90 via-slate-900/80 to-slate-950/90 backdrop-blur-2xl border border-white/5 rounded-3xl p-6 sm:p-10 relative overflow-hidden">
         {{-- Decorative --}}
         <div class="absolute top-0 right-0 w-80 h-80 bg-red-600/5 rounded-full blur-3xl pointer-events-none"></div>
         <div class="absolute -bottom-10 left-10 w-60 h-60 bg-orange-600/5 rounded-full blur-3xl pointer-events-none"></div>
@@ -486,7 +486,7 @@
                     ? min(100, (int)(($item->stock_sold / $item->stock_limit) * 100))
                     : 0;
             @endphp
-            <div class="bg-slate-950 border border-slate-800 rounded-2xl overflow-hidden hover:border-red-500/30 hover:-translate-y-1 hover:shadow-lg hover:shadow-red-950/20 transition-all duration-300 flex flex-col group">
+            <div class="bg-slate-900/60 backdrop-blur-xl border border-white/5 rounded-3xl overflow-hidden hover:border-white/20 hover:-translate-y-2 hover:shadow-premium-hover transition-all duration-500 flex flex-col group">
                 {{-- Image --}}
                 <div class="relative aspect-square overflow-hidden bg-slate-900">
                     <a href="{{ route('products.show', $item->product->slug) }}">
@@ -505,12 +505,12 @@
                 </div>
                 {{-- Info --}}
                 <div class="p-3 sm:p-4 flex-1 flex flex-col gap-2">
-                    <h3 class="text-xs sm:text-sm font-semibold text-slate-200 line-clamp-2 leading-snug group-theme-text transition-colors">
+                    <h3 class="text-xs sm:text-sm font-bold text-white line-clamp-2 leading-snug group-theme-text transition-colors">
                         <a href="{{ route('products.show', $item->product->slug) }}">{{ $item->product->name }}</a>
                     </h3>
                     <div class="flex flex-wrap items-baseline gap-1.5">
                         <span class="text-sm sm:text-base font-black theme-text">Rp {{ number_format($item->discounted_price, 0, ',', '.') }}</span>
-                        <span class="text-xs text-slate-500 line-through">Rp {{ number_format($item->product->price, 0, ',', '.') }}</span>
+                        <span class="text-xs text-slate-400 line-through">Rp {{ number_format($item->product->price, 0, ',', '.') }}</span>
                     </div>
                     {{-- Progress bar --}}
                     <div class="mt-auto">
@@ -563,7 +563,7 @@ function renderProductCard($product) {
 
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5">
         @foreach($featuredProducts as $product)
-        <article class="group bg-slate-900 border border-slate-800 theme-card-hover rounded-2xl overflow-hidden transition-all duration-300 flex flex-col">
+        <article class="group bg-slate-900/60 backdrop-blur-xl border border-white/5 theme-card-hover rounded-3xl overflow-hidden transition-all duration-500 flex flex-col hover:-translate-y-2 hover:shadow-premium-hover hover:border-white/20">
             <a href="{{ route('products.show', $product->slug) }}" class="block relative aspect-square overflow-hidden bg-slate-950">
                 <img
                     src="{{ $product->thumbnail_url }}"
@@ -584,13 +584,13 @@ function renderProductCard($product) {
             </a>
             <div class="p-3.5 sm:p-4 flex flex-col gap-2 flex-1">
                 <p class="text-[10px] font-bold text-slate-500 uppercase tracking-widest truncate">{{ $product->category?->name ?? 'Sparepart' }}</p>
-                <h3 class="text-xs sm:text-sm font-semibold text-slate-100 line-clamp-2 leading-snug group-theme-text transition-colors">
+                <h3 class="text-xs sm:text-sm font-bold text-white line-clamp-2 leading-snug group-theme-text transition-colors">
                     <a href="{{ route('products.show', $product->slug) }}">{{ $product->name }}</a>
                 </h3>
                 <div class="flex items-baseline gap-2 mt-auto pt-1">
                     <span class="text-sm sm:text-base font-black text-slate-100">Rp {{ number_format($product->getFinalPrice(), 0, ',', '.') }}</span>
                     @if($product->is_on_sale)
-                    <span class="text-xs text-slate-500 line-through">Rp {{ number_format($product->compare_at_price, 0, ',', '.') }}</span>
+                    <span class="text-xs text-slate-400 line-through">Rp {{ number_format($product->compare_at_price, 0, ',', '.') }}</span>
                     @endif
                 </div>
                 <div class="flex gap-2 mt-1">

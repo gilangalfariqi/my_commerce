@@ -35,4 +35,20 @@ return [
         ],
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | WhatsApp Configuration
+    |--------------------------------------------------------------------------
+    |
+    | Nomor WhatsApp toko untuk fitur direct chat & checkout.
+    | Format: kode negara + nomor tanpa tanda + (contoh: 6281234567890).
+    | Prioritas utama diambil dari DB Settings (store_whatsapp key).
+    | Config ini sebagai fallback jika DB belum dikonfigurasi.
+    |
+    */
+    'whatsapp' => [
+        'number'           => env('WHATSAPP_NUMBER', ''),
+        'checkout_number'  => env('WHATSAPP_CHECKOUT_NUMBER', env('WHATSAPP_NUMBER', '')),
+    ],
+
 ];
